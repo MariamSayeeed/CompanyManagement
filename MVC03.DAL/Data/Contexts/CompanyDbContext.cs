@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MVC03.DAL.Data.Contexts
 {
-    internal class CompanyDbContext : DbContext
+    public class CompanyDbContext : DbContext
     {
 
         public CompanyDbContext() : base() 
@@ -29,7 +29,7 @@ namespace MVC03.DAL.Data.Contexts
             base.OnModelCreating(modelBuilder);
         }
 
-        DbSet <Department> Departments { get; set; }
+        public DbSet <Department> Departments { get; set; }
 
     }
 }
