@@ -58,12 +58,17 @@ namespace MVC03.PL.Controllers
         //    return View(deprtment);
         //}
 
-      //  [HttpGet]
-        //public IActionResult Details()
-        //{
-        //  var deprtment = _deptRepository.Get(id);
+        [HttpGet]
+        public IActionResult Details(int? id )
+        {
+            if (id is null) return BadRequest("Invalid Id ");
+           
+            var deprtment = _deptRepository.Get(id.Value);
 
-        //}
+            if (deprtment == null) return NotFound(new { statusCode =400 , messege = $"Department With Id:{id} is Not Found" });   
+
+            return View(deprtment);
+        }
 
     }
 }

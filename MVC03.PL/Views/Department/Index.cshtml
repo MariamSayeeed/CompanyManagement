@@ -34,7 +34,7 @@
                     <td>@item.Code</td>
                     <td>@item.Name</td>
                     <td>@item.CreateAt</td>
-                    <td><a asp-action="Details" class="btn btn-warning">Details</a></td>
+                    <td><a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning">Details</a></td>
                     <td><a asp-action="Edit" class="btn btn-success">Update</a></td>
                     <td><a asp-action="Delete" class="btn btn-danger">Delete</a></td>
                 </tr>
