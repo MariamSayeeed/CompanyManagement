@@ -53,7 +53,7 @@ namespace MVC03.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Details(int? id )
+        public IActionResult Details(int? id , string viewname= "Details")
         {
             if (id is null) return BadRequest("Invalid Id ");
            
@@ -61,7 +61,7 @@ namespace MVC03.PL.Controllers
 
             if (deprtment == null) return NotFound(new { statusCode =400 , messege = $"Department With Id:{id} is Not Found" });   
 
-            return View(deprtment);
+            return View(viewname, deprtment);
         }
 
 
@@ -70,13 +70,14 @@ namespace MVC03.PL.Controllers
         public IActionResult Edit(int? id)
         {
 
-            if (id is null) return BadRequest("Invalid Id ");
+            /*  //if (id is null) return BadRequest("Invalid Id ");
 
-            var deprtment = _deptRepository.Get(id.Value);
+              //var deprtment = _deptRepository.Get(id.Value);
 
-            if (deprtment == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
+              //if (deprtment == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
 
-            return View(deprtment);
+              //return View(deprtment);*/
+            return Details(id, "Edit");
         }
 
         //[HttpPost]
@@ -128,14 +129,14 @@ namespace MVC03.PL.Controllers
         [HttpGet]
         public IActionResult Delete(int? id)
         {
-            if (id is null) return BadRequest("Invalid Id ");
+            /*//if (id is null) return BadRequest("Invalid Id ");
 
-            var deprtment = _deptRepository.Get(id.Value);
+            //var deprtment = _deptRepository.Get(id.Value);
 
-            if (deprtment == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
-            
+            //if (deprtment == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
+*/
 
-            return View(deprtment);
+            return Details(id, "Delete");
         }
 
 
