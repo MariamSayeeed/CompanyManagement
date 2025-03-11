@@ -51,13 +51,6 @@ namespace MVC03.PL.Controllers
         }
 
 
-        //[HttpGet]
-        //public IActionResult Edit(Department _department)
-        //{
-        //    var deprtment = _deptRepository.Update(_department);
-        //    return View(deprtment);
-        //}
-
         [HttpGet]
         public IActionResult Details(int? id )
         {
@@ -69,6 +62,44 @@ namespace MVC03.PL.Controllers
 
             return View(deprtment);
         }
+
+
+
+       
+
+
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+
+            if (id is null) return BadRequest("Invalid Id ");
+
+            var deprtment = _deptRepository.Get(id.Value);
+
+            if (deprtment == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
+
+            return View(deprtment);
+        }
+
+        [HttpPost]
+        public IActionResult Edit([FromRoute] int id,Department department)
+        {
+            if (ModelState.IsValid) // server side validation
+            {
+                if (id == department.Id)   // ---> devinsive code 
+                {
+                    var count = _deptRepository.Update(department);
+                    if (count > 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
+            }
+
+            return View(department);
+        }
+
 
     }
 }
