@@ -152,10 +152,6 @@ namespace MVC03.PL.Controllers
 
                 if (department == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
 
-                department.Name = model.Name;
-                department.Code = model.Code;
-                department.CreateAt = model.CreateAt;
-
                 var count = _deptRepository.Delete(department);
                 if (count > 0)
                 {
