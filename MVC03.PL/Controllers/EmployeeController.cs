@@ -14,8 +14,20 @@ namespace MVC03.PL.Controllers
         }
         public IActionResult Index()
         {
+            // Dictionary : 
+            // Storage => ViewData , ViewBag , TempData
+
+            // 1. ViewData : transfer extra info from action to view
+            // 2. ViewBag : transfer extra info from action to view &&  Safety Type ==> 'Generic'
+            // 3. TempData : transfer extra info from one request to another
+
             var employees = _employeeRepo.GetAll();
+            ViewData["Message"] = "Hello from ViewData";
+            ViewBag.Message2 = "Hello from ViewBag";
+            ViewBag.NewType = new { message = "Anoynomous Type" };
             return View(employees);
+
+
         }
 
         [HttpGet]
@@ -48,6 +60,7 @@ namespace MVC03.PL.Controllers
                 var count = _employeeRepo.Add(employee);
                 if (count > 0)
                 {
+                    TempData["Message"] = "Employee is Created Success";
                     return RedirectToAction(nameof(Index));
                 }
             }
