@@ -10,27 +10,9 @@
 <br />
 
 <div>
-    <div class="my-3">
-        <label asp-for="Code" class="col-form-label">Code</label>
-        <input type="text" asp-for="Code" class="form-control" readonly />
-        <span asp-validation-for="Code" class="text-danger"></span>
-    </div>
+    
+    <partial name="DepartmentPartialView/_DeleteDetailsPartialView" />
 
-    <div class="my-3">
-        <label asp-for="Name" class="col-form-label">Name</label>
-        <input type="text" asp-for="Name" class="form-control" readonly />
-        <span asp-validation-for="Name" class="text-danger"></span>
-
-
-    </div>
-
-    <div class="my-3">
-        <label asp-for="CreateAt" class="col-form-label">Created At</label>
-        <input asp-for="CreateAt" class="form-control" readonly />
-        <span asp-validation-for="CreateAt" class="text-danger"></span>
-
-
-    </div>
     <div class="my-3">
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"> Edit </a>
         <a asp-action="Index" class="btn btn-light">Back To List </a>

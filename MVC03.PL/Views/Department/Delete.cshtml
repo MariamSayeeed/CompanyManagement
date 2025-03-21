@@ -7,27 +7,9 @@
 
 
 <form asp-action="Delete">
-    <div class="my-3">
-        <label asp-for="Code" class="col-form-label">Code</label>
-        <input type="text" asp-for="Code" class="form-control" readonly/>
-        <span asp-validation-for="Code" class="text-danger"></span>
-    </div>
 
-    <div class="my-3">
-        <label asp-for="Name" class="col-form-label">Name</label>
-        <input type="text" asp-for="Name" class="form-control" readonly />
-        <span asp-validation-for="Name" class="text-danger"></span>
+    <partial name="DepartmentPartialView/_DeleteDetailsPartialView" />
 
-
-    </div>
-
-    <div class="my-3">
-        <label asp-for="CreateAt" class="col-form-label">Created At</label>
-        <input asp-for="CreateAt" class="form-control" readonly />
-        <span asp-validation-for="CreateAt" class="text-danger"></span>
-
-
-    </div>
     <div class="my-3">
         <input type="submit" class="btn btn-danger" value="Delete" />
         @* <a asp-action="Edit" class="btn btn-warning">Save</a> *@
