@@ -86,30 +86,29 @@ namespace MVC03.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
-            return Details(id, "Edit");
+            if (id is null) return BadRequest();
+            var employee = _employeeRepo.Get(id.Value);
+
+            if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
+            var employeeDto = new CreateEmployeeDto
+            {
+                Email = employee.Email,
+                Phone = employee.Phone,
+                Address = employee.Address,
+                Age = employee.Age,
+                HiringDate = employee.HiringDate,
+                Name = employee.Name,
+                IsActive = employee.IsActive,
+                IsDeleted = employee.IsDeleted,
+                CreateAt = employee.CreateAt,
+                Salary = employee.Salary
+            };
+
+
+            return View(employeeDto);
         }
-
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Edit([FromRoute] int id, Employee model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (id == model.Id)
-        //        {
-        //            var count = _employeeRepo.Update(model);
-        //            if (count > 0)
-        //            {
-        //                return RedirectToAction(nameof(Index));
-        //            }
-
-        //        }
-        //    }
-        //    return View(model);
-        //}
 
 
         [HttpPost]
@@ -118,31 +117,64 @@ namespace MVC03.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var employee = _employeeRepo.Get(id);
+                var employee = new Employee
+                {
+                    Id = id,
+                    Email = model.Email,
+                    Phone = model.Phone,
+                    Address = model.Address,
+                    Age = model.Age,
+                    HiringDate = model.HiringDate,
+                    Name = model.Name,
+                    IsActive = model.IsActive,
+                    IsDeleted = model.IsDeleted,
+                    CreateAt = model.CreateAt,
+                    Salary = model.Salary
+                };
 
-                if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
-
-
-                    employee.Email = model.Email;
-                    employee.Phone = model.Phone;
-                    employee.Address = model.Address;
-                    employee.Age = model.Age;
-                    employee.HiringDate = model.HiringDate;
-                    employee.Name = model.Name;
-                    employee.IsActive = model.IsActive;
-                    employee.IsDeleted = model.IsDeleted;
-                    employee.CreateAt = model.CreateAt;
-                    employee.Salary = model.Salary;
 
                 var count = _employeeRepo.Update(employee);
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
                 }
-
             }
+
             return View(model);
         }
+
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Edit([FromRoute] int id, CreateEmployeeDto model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var employee = _employeeRepo.Get(id);
+
+        //        if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
+
+
+        //employee.Email = model.Email;
+        //            employee.Phone = model.Phone;
+        //            employee.Address = model.Address;
+        //            employee.Age = model.Age;
+        //            employee.HiringDate = model.HiringDate;
+        //            employee.Name = model.Name;
+        //            employee.IsActive = model.IsActive;
+        //            employee.IsDeleted = model.IsDeleted;
+        //            employee.CreateAt = model.CreateAt;
+        //            employee.Salary = model.Salary;
+
+        //        var count = _employeeRepo.Update(employee);
+        //        if (count > 0)
+        //        {
+        //            return RedirectToAction(nameof(Index));
+        //        }
+
+        //    }
+        //    return View(model);
+        //}
 
 
         [HttpGet]

@@ -73,10 +73,9 @@
                     <td>@item.IsDeleted</td>
                     <td>@item.HiringDate</td>
                     <td>@item.CreateAt</td>
-                   
-                    <td><a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning">Details</a></td>
-                    <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Update</a></td>
-                    <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a></td>
+                    <partial name="_ButtonPartialView" model="@item.Id" />
+
+
                 </tr>
             }
 
