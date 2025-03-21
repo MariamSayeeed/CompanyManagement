@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using MVC03.BLL.Interfaces;
 using MVC03.DAL.Models;
 using MVC03.PL.Dtos;
@@ -9,10 +10,13 @@ namespace MVC03.PL.Controllers
     {
         private readonly IEmployeeRepository _employeeRepo;
         private readonly IDepartmentRepository _departmentRepo;
-        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepo)
+        private readonly IMapper _mapper;
+
+        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepo , IMapper mapper)
         {
             _employeeRepo = employeeRepository;
             _departmentRepo = departmentRepo;
+            _mapper = mapper;
         }
         public IActionResult Index()
         {
@@ -33,7 +37,7 @@ namespace MVC03.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create(int id)
+        public IActionResult Create()
         {
             var departments = _departmentRepo.GetAll();
             ViewData["departments"] = departments;
@@ -46,29 +50,40 @@ namespace MVC03.PL.Controllers
         {
             if(ModelState.IsValid )
             {
-                var employee = new Employee()
-                {
-                    Name = model.Name,
-                    Salary = model.Salary,
-                    Address = model.Address,
-                    IsActive = model.IsActive,
-                    IsDeleted = model.IsDeleted,
-                    Age = model.Age,
 
-                    HiringDate = model.HiringDate,
-                    Phone = model.Phone,
-                    CreateAt = model.CreateAt,
-                    Email = model.Email,
-
-                };
-                var count = _employeeRepo.Add(employee);
-                if (count > 0)
+                try
                 {
-                    TempData["Message"] = "Employee is Created Success";
-                    return RedirectToAction(nameof(Index));
+                    // Manual Mapping
+                    //var employee = new Employee()
+                    //{
+                    //    Name = model.Name,
+                    //    Salary = model.Salary,
+                    //    Address = model.Address,
+                    //    IsActive = model.IsActive,
+                    //    IsDeleted = model.IsDeleted,
+                    //    Age = model.Age,
+                    //    HiringDate = model.HiringDate,
+                    //    Phone = model.Phone,
+                    //    CreateAt = model.CreateAt,
+                    //    Email = model.Email,
+
+                    //};
+
+                   var employee= _mapper.Map<Employee>(model);
+
+                    var count = _employeeRepo.Add(employee);
+                    if (count > 0)
+                    {
+                        TempData["Message"] = "Employee is Created Success";
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+               
             }
-
             return View(model);
         }
 
@@ -88,24 +103,14 @@ namespace MVC03.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
+            var departments = _departmentRepo.GetAll();
+            ViewData["departments"] = departments;
+
             if (id is null) return BadRequest();
             var employee = _employeeRepo.Get(id.Value);
-
             if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
-            var employeeDto = new CreateEmployeeDto
-            {
-                Email = employee.Email,
-                Phone = employee.Phone,
-                Address = employee.Address,
-                Age = employee.Age,
-                HiringDate = employee.HiringDate,
-                Name = employee.Name,
-                IsActive = employee.IsActive,
-                IsDeleted = employee.IsDeleted,
-                CreateAt = employee.CreateAt,
-                Salary = employee.Salary
-            };
-
+            
+            var employeeDto = _mapper.Map<CreateEmployeeDto>(employee);
 
             return View(employeeDto);
         }
@@ -117,21 +122,13 @@ namespace MVC03.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var employee = new Employee
-                {
-                    Id = id,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Address = model.Address,
-                    Age = model.Age,
-                    HiringDate = model.HiringDate,
-                    Name = model.Name,
-                    IsActive = model.IsActive,
-                    IsDeleted = model.IsDeleted,
-                    CreateAt = model.CreateAt,
-                    Salary = model.Salary
-                };
+                var departments = _departmentRepo.GetAll();
+                ViewData["departments"] = departments;
 
+                var employee = _employeeRepo.Get(id);
+                if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
+
+                _mapper.Map(model, employee);
 
                 var count = _employeeRepo.Update(employee);
                 if (count > 0)

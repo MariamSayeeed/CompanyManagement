@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MVC03.DAL.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVC03.PL.Dtos
 {
@@ -12,5 +13,6 @@ namespace MVC03.PL.Dtos
 
         [Required(ErrorMessage = "CreateAt is Required !")]
         public DateTime CreateAt { get; set; }
+
     }
 }
