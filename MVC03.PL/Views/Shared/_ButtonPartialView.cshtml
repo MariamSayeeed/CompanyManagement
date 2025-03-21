@@ -1,0 +1,9 @@
+﻿@model int
+@{
+    ViewData["Title"] = "_ButtonPartialView";
+}
+
+
+<td><a asp-action="Details" asp-route-id="@Model" class="btn btn-warning">Details</a></td>
+<td><a asp-action="Edit" asp-route-id="@Model" class="btn btn-success">Update</a></td>
+<td><a asp-action="Delete" asp-route-id="@Model" class="btn btn-danger">Delete</a></td>
