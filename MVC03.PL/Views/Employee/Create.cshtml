@@ -1,6 +1,8 @@
-﻿@model EmployeeDto
+﻿@model CreateEmployeeDto
 
-
+@* @{ *@
+@*     ViewData["departments"]; *@
+@* } *@
 
 @{
     ViewData["Title"] = "Create";
@@ -69,7 +71,13 @@
         <label asp-for="CreateAt" class="col-form-label">Created At</label>
         <input asp-for="CreateAt" class="form-control" />
         <span asp-validation-for="CreateAt" class="text-danger"></span>
+    </div>
 
+    <div class="my-3">
+        <label asp-for="CreateAt" class="col-form-label">Created At</label>
+        <input asp-for="CreateAt" class="form-control" />
+        <span asp-validation-for="CreateAt" class="text-danger"></span>
+    </div>
 
 
     <div class="my-3">
@@ -77,4 +85,11 @@
         <a asp-action="Index" class="btn btn-light">Back To List </a>
     </div>
 </form>
+
+@section ValidationSection{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+}
+
 

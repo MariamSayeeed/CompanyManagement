@@ -8,9 +8,11 @@ namespace MVC03.PL.Controllers
     public class EmployeeController : Controller 
     {
         private readonly IEmployeeRepository _employeeRepo;
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        private readonly IDepartmentRepository _departmentRepo;
+        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepo)
         {
             _employeeRepo = employeeRepository;
+            _departmentRepo = departmentRepo;
         }
         public IActionResult Index()
         {
@@ -33,12 +35,14 @@ namespace MVC03.PL.Controllers
         [HttpGet]
         public IActionResult Create(int id)
         {
+            var departments = _departmentRepo.GetAll();
+            ViewData["departments"] = departments;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(EmployeeDto model)
+        public IActionResult Create(CreateEmployeeDto model)
         {
             if(ModelState.IsValid )
             {
@@ -110,7 +114,7 @@ namespace MVC03.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, EmployeeDto model)
+        public IActionResult Edit([FromRoute] int id, CreateEmployeeDto model)
         {
             if (ModelState.IsValid)
             {
@@ -150,7 +154,7 @@ namespace MVC03.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute] int id, EmployeeDto model)
+        public IActionResult Delete([FromRoute] int id, CreateEmployeeDto model)
         {
             if (ModelState.IsValid)
             {
