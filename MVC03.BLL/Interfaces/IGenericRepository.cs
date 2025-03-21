@@ -14,5 +14,6 @@ namespace MVC03.BLL.Interfaces
         int Add(T department);
         int Update(T department);
         int Delete(T department);
+        //IEnumerable<T> GetByName(string name);
     }
 }
