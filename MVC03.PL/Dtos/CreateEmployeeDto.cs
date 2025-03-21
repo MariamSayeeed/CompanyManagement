@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MVC03.PL.Dtos
 {
-    public class EmployeeDto
+    public class CreateEmployeeDto
     {
         [Required(ErrorMessage ="Name is Requied")]
         public string Name { get; set; }
@@ -25,5 +25,6 @@ namespace MVC03.PL.Dtos
         [DisplayName("Hiring Date")]
         public DateTime HiringDate { get; set; }
         public DateTime CreateAt { get; set; }
+
     }
 }
