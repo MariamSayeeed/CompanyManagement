@@ -1,4 +1,5 @@
-﻿using MVC03.BLL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using MVC03.BLL.Interfaces;
 using MVC03.DAL.Data.Contexts;
 using MVC03.DAL.Models;
 using System;
@@ -49,6 +50,6 @@ namespace MVC03.BLL.Repositories
 
         }
 
-       
+        
     }
 }

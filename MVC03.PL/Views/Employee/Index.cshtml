@@ -10,26 +10,42 @@
 <br />
 <br />
 
-@if (!string.IsNullOrEmpty(TempData["Message"] as string))
-{
-    <div class="m-3 alert-info">
-        <p>@TempData["Message"]</p>
+<form>
+    <div class="container m-4 ">
+        <div class="row">
+           
+            <div class="col-6">
+                <input name="SearchInput" class="form-control" />
+            </div>
+            <div class="col-6">
+                <input type="submit" value="Search" class="btn btn-success" />
+            </div>
+        </div>
+        
     </div>
-
-}
-
+</form>
 
 
-<div class="m-3 alert-danger">
-    <p>@ViewData["Message"]</p>
-</div>
+@* @if (!string.IsNullOrEmpty(TempData["Message"] as string)) *@
+@* { *@
+@*     <div class="m-3 alert-info"> *@
+@*         <p>@TempData["Message"]</p> *@
+@*     </div> *@
 
-<div class="m-3 alert-success">
-    <p>@ViewBag.Message2</p>
-</div>
-<div class="m-3 alert-success">
-    <p>@message2</p>
-</div>
+@* } *@
+
+
+
+@* <div class="m-3 alert-danger"> *@
+@*     <p>@ViewData["Message"]</p> *@
+@* </div> *@
+
+@* <div class="m-3 alert-success"> *@
+@*     <p>@ViewBag.Message2</p> *@
+@* </div> *@
+@* <div class="m-3 alert-success"> *@
+@*     <p>@message2</p> *@
+@* </div> *@
 
 <a asp-action="Create" asp-controller="Employee" class="btn btn-primary">Create Employee</a>
 <br />

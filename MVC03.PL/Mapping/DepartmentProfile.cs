@@ -10,6 +10,8 @@ namespace MVC03.PL.Mapping
         {
             CreateMap<CreateDepartmentDto, Department>();
             CreateMap<Department,CreateDepartmentDto >();
+            //CreateMap<Department,CreateDepartmentDto >()
+            //            .ForMember(D=> D.Name, X=> X.MapFrom(s=>s.Name) );
         }
     }
 }

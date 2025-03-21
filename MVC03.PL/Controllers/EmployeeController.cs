@@ -18,8 +18,19 @@ namespace MVC03.PL.Controllers
             _departmentRepo = departmentRepo;
             _mapper = mapper;
         }
-        public IActionResult Index()
+        public IActionResult Index(string? searchInput)
         {
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrEmpty(searchInput))
+            {
+                 employees = _employeeRepo.GetAll();
+
+            }
+
+            else
+            {
+                 employees = _employeeRepo.GetByName(searchInput);
+            }
             // Dictionary : 
             // Storage => ViewData , ViewBag , TempData
 
@@ -27,7 +38,7 @@ namespace MVC03.PL.Controllers
             // 2. ViewBag : transfer extra info from action to view &&  Safety Type ==> 'Generic'
             // 3. TempData : transfer extra info from one request to another
 
-            var employees = _employeeRepo.GetAll();
+            //var employees = _employeeRepo.GetAll();
             ViewData["Message"] = "Hello from ViewData";
             ViewBag.Message2 = "Hello from ViewBag";
             ViewBag.NewType = new { message = "Anoynomous Type" };
