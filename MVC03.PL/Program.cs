@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MVC03.BLL.Interfaces;
 using MVC03.BLL.Repositories;
 using MVC03.DAL.Data.Contexts;
+using MVC03.PL.Mapping;
 
 namespace MVC03.PL
 {
@@ -20,7 +21,9 @@ namespace MVC03.PL
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             }); // Allow Dependency Injection for CompanyDbContext
 
-
+            //builder.Services.AddAutoMapper(typeof(EmployeeProfile));
+            builder.Services.AddAutoMapper(M=> M.AddProfile(new EmployeeProfile()));
+            builder.Services.AddAutoMapper(M=> M.AddProfile(new DepartmentProfile()));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

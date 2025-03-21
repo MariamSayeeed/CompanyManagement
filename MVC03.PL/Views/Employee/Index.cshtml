@@ -52,6 +52,7 @@
                 @* <th>@Html.DisplayFor(E=>E.Hi)</th> *@
                 <th>HiringDate</th>
                 <th>CreateAt</th>
+                <th>Department</th>
                 <th>Details</th>
                 <th>Update</th>
                 <th>Delete</th>
@@ -73,6 +74,15 @@
                     <td>@item.IsDeleted</td>
                     <td>@item.HiringDate</td>
                     <td>@item.CreateAt</td>
+
+                    @if (item.Department is not null)
+                    {
+                        <td>@item.Department.Name; </td>
+                    }
+                     
+                    else{
+                    <td>No Department</td>
+                    }    
                     <partial name="_ButtonPartialView" model="@item.Id" />
 
 

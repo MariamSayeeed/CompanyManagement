@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using MVC03.BLL.Interfaces;
 using MVC03.BLL.Repositories;
 using MVC03.DAL.Models;
@@ -10,10 +11,12 @@ namespace MVC03.PL.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _deptRepository;
+        private readonly IMapper _mapper;
 
-        public DepartmentController(IDepartmentRepository departmentRepository)
+        public DepartmentController(IDepartmentRepository departmentRepository , IMapper mapper)
         {
             _deptRepository = departmentRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]  // GET ://Department//Index
@@ -35,20 +38,29 @@ namespace MVC03.PL.Controllers
         {
             if (ModelState.IsValid) // server side validation
             {
-                var department = new Department()
+                try
                 {
-                    Name = model.Name,
-                    Code = model.Code,
-                    CreateAt = model.CreateAt
-                };
-                var count = _deptRepository.Add(department);
-                if (count > 0)
+                    var department = new Department()
+                    {
+                        Name = model.Name,
+                        Code = model.Code,
+                        CreateAt = model.CreateAt
+                    };
+                    var count = _deptRepository.Add(department);
+                    if (count > 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                }
+                catch (Exception ex)
                 {
-                    return RedirectToAction(nameof(Index));
+                    ModelState.AddModelError("", ex.Message);
                 }
             }
 
             return View(model);
+
         }
 
 
@@ -75,13 +87,13 @@ namespace MVC03.PL.Controllers
             var deprtment = _deptRepository.Get(id.Value);
 
             if (deprtment == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
-            var departmentDto = new CreateDepartmentDto
-            {
-                Code = deprtment.Code,
-                Name = deprtment.Name,
+            //var departmentDto = new CreateDepartmentDto
+            //{
+            //    Code = deprtment.Code,
+            //    Name = deprtment.Name,
 
-            };
-
+            //};
+            var departmentDto = _mapper.Map<CreateDepartmentDto> (deprtment);
 
             return View(departmentDto);
         }
@@ -117,10 +129,11 @@ namespace MVC03.PL.Controllers
 
                 if (department == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
 
-                department.Name = model.Name;
-                department.Code = model.Code;
-                department.CreateAt = model.CreateAt;
-                
+                //department.Name = model.Name;
+                //department.Code = model.Code;
+                //department.CreateAt = model.CreateAt;
+                _mapper.Map(model, department);
+
                 var count = _deptRepository.Update(department);
                 if (count > 0)
                 {
@@ -135,14 +148,18 @@ namespace MVC03.PL.Controllers
         [HttpGet]
         public IActionResult Delete(int? id)
         {
-            /*//if (id is null) return BadRequest("Invalid Id ");
+            if (id is null) return BadRequest("Invalid Id ");
 
-            //var deprtment = _deptRepository.Get(id.Value);
+            var deprtment = _deptRepository.Get(id.Value);
 
-            //if (deprtment == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
-*/
+            if (deprtment == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
+            var count = _deptRepository.Delete(deprtment);
+            if (count > 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-            return Details(id, "Delete");
+            return View();
         }
 
 
@@ -150,7 +167,7 @@ namespace MVC03.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute]int id,CreateDepartmentDto model)
+        public IActionResult Delete([FromRoute]int id,Department model)
         {
             if (ModelState.IsValid) // server side validation
             {

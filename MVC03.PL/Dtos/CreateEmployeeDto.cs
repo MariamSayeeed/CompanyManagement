@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using MVC03.DAL.Models;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace MVC03.PL.Dtos
@@ -7,7 +8,7 @@ namespace MVC03.PL.Dtos
     {
         [Required(ErrorMessage ="Name is Requied")]
         public string Name { get; set; }
-        [Range (25 , 60)]
+        [Range (20 , 60)]
         public int? Age { get; set; }
 
         [DataType(DataType.Currency)]
@@ -25,6 +26,9 @@ namespace MVC03.PL.Dtos
         [DisplayName("Hiring Date")]
         public DateTime HiringDate { get; set; }
         public DateTime CreateAt { get; set; }
+
+        [DisplayName("Department")]
+        public int? DepartmentId { get; set; }
 
     }
 }
