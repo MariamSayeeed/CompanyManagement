@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MVC03.BLL.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         private readonly CompanyDbContext _context;
 
@@ -19,34 +19,40 @@ namespace MVC03.BLL.Repositories
             _context = context;
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<TEntity> GetAll()
         {
-            return _context.Set<T>().ToList();
+            if (typeof(TEntity) == typeof(Employee))
+            {
+                return (IEnumerable<TEntity>) _context.Employees.Include(E=> E.Department).ToList();
+            }
+            return _context.Set<TEntity>().ToList();
         }
 
-        public T Get(int id)
+        public TEntity Get(int id)
         {
-            return _context.Set<T>().Find(id);
+            if (typeof(TEntity) == typeof(Employee))
+            {
+                return _context.Employees.Include(E => E.Department).FirstOrDefault(E=> E.Id == id) as TEntity;
+            }
+
+                return _context.Set<TEntity>().Find(id);
 
         }
 
 
-        public int Add(T model)
+        public void Add(TEntity model)
         {
-            _context.Set<T>().Add(model);
-            return _context.SaveChanges();
+            _context.Add(model);
         }
 
-        public int Update(T model)
+        public void Update(TEntity model)
         {
-            _context.Set<T>().Update(model);
-            return _context.SaveChanges();
+            _context.Update(model);
         }
 
-        public int Delete(T model)
+        public void Delete(TEntity model)
         {
-            _context.Set<T>().Remove(model);
-            return _context.SaveChanges();
+            _context.Remove(model);
 
         }
 
