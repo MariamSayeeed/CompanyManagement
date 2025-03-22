@@ -28,5 +28,10 @@ namespace MVC03.BLL.Repositories
             return _context.SaveChanges();
 
         }
+
+        public void Dispose()
+        {
+            _context?.Dispose();
+        }
     }
 }
