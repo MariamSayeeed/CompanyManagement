@@ -10,19 +10,24 @@ namespace MVC03.PL.Controllers
 {
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _deptRepository;
+        //private readonly IDepartmentRepository _deptRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public DepartmentController(IDepartmentRepository departmentRepository , IMapper mapper)
+        public DepartmentController( IUnitOfWork unitOfWork,
+            //IDepartmentRepository departmentRepository , 
+            IMapper mapper
+            )
         {
-            _deptRepository = departmentRepository;
+            //_deptRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         [HttpGet]  // GET ://Department//Index
         public IActionResult Index()
         {
-            var departments = _deptRepository.GetAll();
+            var departments = _unitOfWork.DepartmentRepository.GetAll();
             return View(departments);
         }
 
@@ -46,7 +51,9 @@ namespace MVC03.PL.Controllers
                         Code = model.Code,
                         CreateAt = model.CreateAt
                     };
-                    var count = _deptRepository.Add(department);
+                    _unitOfWork.DepartmentRepository.Add(department);
+                    var count = _unitOfWork.Complete();
+
                     if (count > 0)
                     {
                         return RedirectToAction(nameof(Index));
@@ -69,7 +76,7 @@ namespace MVC03.PL.Controllers
         {
             if (id is null) return BadRequest("Invalid Id ");
            
-            var deprtment = _deptRepository.Get(id.Value);
+            var deprtment = _unitOfWork.DepartmentRepository.Get(id.Value);
 
             if (deprtment == null) return NotFound(new { statusCode =400 , messege = $"Department With Id:{id} is Not Found" });   
 
@@ -84,7 +91,7 @@ namespace MVC03.PL.Controllers
 
             if (id is null) return BadRequest("Invalid Id ");
 
-            var deprtment = _deptRepository.Get(id.Value);
+            var deprtment = _unitOfWork.DepartmentRepository.Get(id.Value);
 
             if (deprtment == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
             //var departmentDto = new CreateDepartmentDto
@@ -125,7 +132,7 @@ namespace MVC03.PL.Controllers
         {
             if (ModelState.IsValid) // server side validation
             {
-                var department = _deptRepository.Get(id);
+                var department = _unitOfWork.DepartmentRepository.Get(id);
 
                 if (department == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
 
@@ -134,7 +141,9 @@ namespace MVC03.PL.Controllers
                 //department.CreateAt = model.CreateAt;
                 _mapper.Map(model, department);
 
-                var count = _deptRepository.Update(department);
+               _unitOfWork.DepartmentRepository.Update(department);
+                var count = _unitOfWork.Complete();
+
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -150,10 +159,13 @@ namespace MVC03.PL.Controllers
         {
             if (id is null) return BadRequest("Invalid Id ");
 
-            var deprtment = _deptRepository.Get(id.Value);
+            var deprtment = _unitOfWork.DepartmentRepository.Get(id.Value);
 
             if (deprtment == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
-            var count = _deptRepository.Delete(deprtment);
+            _unitOfWork.DepartmentRepository.Delete(deprtment);
+            
+            var count = _unitOfWork.Complete();
+
             if (count > 0)
             {
                 return RedirectToAction(nameof(Index));
@@ -171,11 +183,13 @@ namespace MVC03.PL.Controllers
         {
             if (ModelState.IsValid) // server side validation
             {
-                var department = _deptRepository.Get(id);
+                var department = _unitOfWork.DepartmentRepository.Get(id);
 
                 if (department == null) return NotFound(new { statusCode = 400, messege = $"Department With Id:{id} is Not Found" });
 
-                var count = _deptRepository.Delete(department);
+                _unitOfWork.DepartmentRepository.Delete(department);
+                var count = _unitOfWork.Complete();
+
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));

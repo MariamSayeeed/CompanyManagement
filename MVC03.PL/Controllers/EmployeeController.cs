@@ -8,14 +8,21 @@ namespace MVC03.PL.Controllers
 {
     public class EmployeeController : Controller 
     {
-        private readonly IEmployeeRepository _employeeRepo;
-        private readonly IDepartmentRepository _departmentRepo;
+        private readonly IUnitOfWork _unitOfWork;
+
+        //private readonly IEmployeeRepository _employeeRepo;
+        //private readonly IDepartmentRepository _departmentRepo;
         private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepo , IMapper mapper)
+        public EmployeeController(IUnitOfWork unitOfWork,
+            //IEmployeeRepository employeeRepository,
+
+            //IDepartmentRepository departmentRepo , 
+            IMapper mapper)
         {
-            _employeeRepo = employeeRepository;
-            _departmentRepo = departmentRepo;
+            _unitOfWork = unitOfWork;
+            //_employeeRepo = employeeRepository;
+            //_departmentRepo = departmentRepo;
             _mapper = mapper;
         }
         public IActionResult Index(string? searchInput)
@@ -23,13 +30,13 @@ namespace MVC03.PL.Controllers
             IEnumerable<Employee> employees;
             if (string.IsNullOrEmpty(searchInput))
             {
-                 employees = _employeeRepo.GetAll();
+                 employees = _unitOfWork.EmployeeRepository.GetAll();
 
             }
 
             else
             {
-                 employees = _employeeRepo.GetByName(searchInput);
+                 employees = _unitOfWork.EmployeeRepository.GetByName(searchInput);
             }
             // Dictionary : 
             // Storage => ViewData , ViewBag , TempData
@@ -50,7 +57,7 @@ namespace MVC03.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var departments = _departmentRepo.GetAll();
+            var departments = _unitOfWork.DepartmentRepository.GetAll();
             ViewData["departments"] = departments;
             return View();
         }
@@ -64,25 +71,12 @@ namespace MVC03.PL.Controllers
 
                 try
                 {
-                    // Manual Mapping
-                    //var employee = new Employee()
-                    //{
-                    //    Name = model.Name,
-                    //    Salary = model.Salary,
-                    //    Address = model.Address,
-                    //    IsActive = model.IsActive,
-                    //    IsDeleted = model.IsDeleted,
-                    //    Age = model.Age,
-                    //    HiringDate = model.HiringDate,
-                    //    Phone = model.Phone,
-                    //    CreateAt = model.CreateAt,
-                    //    Email = model.Email,
-
-                    //};
+                   
 
                    var employee= _mapper.Map<Employee>(model);
 
-                    var count = _employeeRepo.Add(employee);
+                     _unitOfWork.EmployeeRepository.Add(employee);
+                    var count = _unitOfWork.Complete();
                     if (count > 0)
                     {
                         TempData["Message"] = "Employee is Created Success";
@@ -103,7 +97,7 @@ namespace MVC03.PL.Controllers
         public IActionResult Details(int? id , string viewname = "Details")
         {
             if (id is null) return BadRequest();
-            var employee = _employeeRepo.Get(id.Value); 
+            var employee = _unitOfWork.EmployeeRepository.Get(id.Value); 
 
             if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
 
@@ -114,11 +108,11 @@ namespace MVC03.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            var departments = _departmentRepo.GetAll();
+            var departments = _unitOfWork.DepartmentRepository.GetAll();
             ViewData["departments"] = departments;
 
             if (id is null) return BadRequest();
-            var employee = _employeeRepo.Get(id.Value);
+            var employee = _unitOfWork.EmployeeRepository.Get(id.Value);
             if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
             
             var employeeDto = _mapper.Map<CreateEmployeeDto>(employee);
@@ -133,15 +127,17 @@ namespace MVC03.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var departments = _departmentRepo.GetAll();
+                var departments = _unitOfWork.DepartmentRepository.GetAll();
                 ViewData["departments"] = departments;
 
-                var employee = _employeeRepo.Get(id);
+                var employee = _unitOfWork.EmployeeRepository.Get(id);
                 if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
 
                 _mapper.Map(model, employee);
 
-                var count = _employeeRepo.Update(employee);
+                _unitOfWork.EmployeeRepository.Update(employee);
+                var count = _unitOfWork.Complete();
+
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -198,12 +194,14 @@ namespace MVC03.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var employee = _employeeRepo.Get(id);
+                var employee = _unitOfWork.EmployeeRepository.Get(id);
 
                 if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
 
-               
-                var count = _employeeRepo.Delete(employee);
+                
+                _unitOfWork.EmployeeRepository.Delete(employee);
+                var count = _unitOfWork.Complete();
+
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));

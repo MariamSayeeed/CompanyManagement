@@ -16,6 +16,10 @@ namespace MVC03.PL
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>(); // Allow Dependency Injection for DepartmentRepository 
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); // Allow Dependency Injection for EmployeeRepository 
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

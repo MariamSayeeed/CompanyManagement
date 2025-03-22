@@ -2,10 +2,16 @@
 
 @{
     // var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name");
-    var Departments = new SelectList((ViewData["departments"] as IEnumerable<Department>) ?? Enumerable.Empty<Department>(), "Id", "Name");
+     var Departments = new SelectList((ViewData["departments"] as IEnumerable<Department>) ?? Enumerable.Empty<Department>(), "Id", "Name");
 
 }
+@* @inject IDepartmentRepository _departmentRepo *@
 
+@* @{ *@
+
+@*     var Departments = new SelectList(_departmentRepo.GetAll() as IEnumerable<Department>, "Id", "Name"); *@
+@*     //  var departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name"); *@
+@* } *@
 
 <div class="my-3">
     <label asp-for="Name" class="col-form-label">Name</label>
