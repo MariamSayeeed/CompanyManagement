@@ -19,30 +19,30 @@ namespace MVC03.BLL.Repositories
             _context = context;
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task< IEnumerable<TEntity>> GetAllAsync()
         {
             if (typeof(TEntity) == typeof(Employee))
             {
-                return (IEnumerable<TEntity>) _context.Employees.Include(E=> E.Department).ToList();
+                return  (IEnumerable<TEntity>) await _context.Employees.Include(E=> E.Department).ToListAsync();
             }
-            return _context.Set<TEntity>().ToList();
+            return await _context.Set<TEntity>().ToListAsync();
         }
 
-        public TEntity Get(int id)
+        public async Task<TEntity> GetAsync(int id)
         {
             if (typeof(TEntity) == typeof(Employee))
             {
-                return _context.Employees.Include(E => E.Department).FirstOrDefault(E=> E.Id == id) as TEntity;
+                return await _context.Employees.Include(E => E.Department).FirstOrDefaultAsync(E=> E.Id == id) as TEntity;
             }
 
-                return _context.Set<TEntity>().Find(id);
+                return await _context.Set<TEntity>().FindAsync(id);
 
         }
 
-
-        public void Add(TEntity model)
+        
+        public async Task AddAsync(TEntity model)
         {
-            _context.Add(model);
+            await _context.AddAsync(model);
         }
 
         public void Update(TEntity model)

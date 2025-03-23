@@ -7,10 +7,10 @@
 <br />
 <br />
 
-<form asp-action="Edit">
+<form asp-action="Edit" enctype="multipart/form-data">
 
     <partial name="EmployeePartialView/_CreateEditPartialView" />
-
+    <input asp-for="ImageName" hidden/>
     <div class="my-3">
         <input type="submit" class="btn btn-primary" value="Save" />
         @* <a asp-action="Edit" class="btn btn-warning">Save</a> *@
