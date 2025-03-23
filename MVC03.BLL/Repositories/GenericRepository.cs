@@ -28,15 +28,14 @@ namespace MVC03.BLL.Repositories
             return await _context.Set<TEntity>().ToListAsync();
         }
 
-        public async Task<TEntity> GetAsync(int id)
+        public async Task<TEntity?> GetAsync(int id)
         {
             if (typeof(TEntity) == typeof(Employee))
             {
                 return await _context.Employees.Include(E => E.Department).FirstOrDefaultAsync(E=> E.Id == id) as TEntity;
             }
 
-                return await _context.Set<TEntity>().FindAsync(id);
-
+                return  _context.Set<TEntity>().Find(id);
         }
 
         

@@ -114,7 +114,7 @@ namespace MVC03.PL.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            var departments = _unitOfWork.DepartmentRepository.GetAllAsync();
+            var departments = await _unitOfWork.DepartmentRepository.GetAllAsync();
             ViewData["departments"] = departments;
 
             if (id is null) return BadRequest();
