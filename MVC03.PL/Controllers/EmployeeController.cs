@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MVC03.BLL.Interfaces;
 using MVC03.DAL.Models;
 using MVC03.PL.Dtos;
+using MVC03.PL.Helpers;
 
 namespace MVC03.PL.Controllers
 {
@@ -71,7 +72,10 @@ namespace MVC03.PL.Controllers
 
                 try
                 {
-                   
+                   if (model.Image is not null)
+                    {
+                        model.ImageName = DocumentSettings.UploadFile(model.Image, "images");
+                    }
 
                    var employee= _mapper.Map<Employee>(model);
 

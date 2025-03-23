@@ -1,8 +1,7 @@
 ﻿@model IEnumerable<Employee>
 @{
     ViewData["Title"] = "Index";
-    // ViewData[]
-    // string? message = ViewData["Message"] as string;
+  
     var message2 = ViewBag.Message2; 
 }
 
@@ -56,6 +55,7 @@
     <table class=" table table-hover table-striped">
         <thead>
             <tr>
+                <th>Image</th>
                 <th>Name</th>
                 <th>Age</th>
                 <th>Salary</th>
@@ -80,6 +80,9 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>
+                        <img src="~/files/images/@item.ImageName" class="img-fluid rounded"/>
+                    </td>
                     <td>@item.Name</td>
                     <td>@item.Age</td>
                     <td>@item.Salary</td>
