@@ -19,11 +19,11 @@ namespace MVC03.BLL.Repositories
             _context = context;
         }
 
-        public IEnumerable<Employee> GetByName(string name)
+        public async Task<IEnumerable<Employee>> GetByNameAsync(string name)
         {
-            return _context.Employees.Include(E=> E.Department)
+            return await _context.Employees.Include(E=> E.Department)
                                      .Where(e => e.Name.ToLower()
-                                     .Contains(name.ToLower()));
+                                     .Contains(name.ToLower())).ToListAsync();
         }
     }
 }

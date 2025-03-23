@@ -17,7 +17,7 @@ namespace MVC03.BLL.Interfaces
 
 
 
-        IEnumerable<Employee> GetByName(string name);
+        Task<IEnumerable<Employee>> GetByNameAsync(string name);
 
     }
 }
