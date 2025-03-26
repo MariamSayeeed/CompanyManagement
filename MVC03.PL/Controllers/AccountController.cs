@@ -118,6 +118,14 @@ namespace MVC03.PL.Controllers
 
         #region Sign Out
 
+        [HttpGet]
+        public new async Task<ActionResult> SignOut()
+        {
+           await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(SignIn));
+
+        }
+
         #endregion
 
 
