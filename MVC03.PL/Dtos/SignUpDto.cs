@@ -18,10 +18,15 @@ namespace MVC03.PL.Dtos
         
         [Required(ErrorMessage = "Password is Required !! ")]
         [DataType(DataType.Password)]
+        [RegularExpression(@"(?=(?:.*[A-Z]){3})(?=(?:.*[^a-zA-Z]){4})",
+        ErrorMessage = "Password must contain at least 3 uppercase letters and 4 non-alphabetic characters.")]
+
         public string Password { get; set; }
 
         [Required(ErrorMessage = "ConfirmPassword is Required !! ")]
         [DataType(DataType.Password)]
+        [RegularExpression(@"(?=(?:.*[A-Z]){3})(?=(?:.*[^a-zA-Z]){4})",
+        ErrorMessage = "Password must contain at least 3 uppercase letters and 4 non-alphabetic characters.")]
         [Compare(nameof(Password), ErrorMessage = "ConfirmPassword does not match the Password ") ]
         public string ConfirmPassword { get; set; }
 
