@@ -5,7 +5,6 @@
         public DocumentSettings() { }
 
         //1. Upload
-
         // return imageName
 
         public static string UploadFile(IFormFile file, string fileFolder)
@@ -22,7 +21,6 @@
             return fileName ;
         }
 
-
         //2. Delete
 
         public static void DeleteFile(string fileName, string fileFolder)
@@ -31,7 +29,7 @@
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\files", fileFolder , fileName);
 
             if (File.Exists(filePath)) 
-                File.Delete(filePath);
+                     File.Delete(filePath);
 
         }   
 
