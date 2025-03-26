@@ -2,20 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using MVC03.DAL.Models;
 using MVC03.PL.Dtos;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MVC03.PL.Controllers
 {
-
 
     //  P@sW0rrd
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<AppUser> userManager)
+        public AccountController(UserManager<AppUser> userManager , SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         #region Sign Up
@@ -78,8 +78,35 @@ namespace MVC03.PL.Controllers
         }
 
         [HttpPost]
-        public ActionResult SignIn(SignInDto model)
+        public async Task<ActionResult> SignIn(SignInDto model)
         {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user is not null)
+                {
+                    var flag = await _userManager.CheckPasswordAsync(user, model.Password);
+                    if (flag)
+                    {
+                        // Sign in
+                        var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
+                        if (result.Succeeded)
+                        {
+                            return RedirectToAction(nameof(HomeController.Index), "Home");
+                        }
+
+                    }
+
+                    ModelState.AddModelError("", "Invalid Login !!");
+
+
+
+                }
+
+                ModelState.AddModelError("", "Invalid Login !!");
+
+            }
 
             return View();
         }
