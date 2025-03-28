@@ -9,6 +9,7 @@ namespace MVC03.PL.Helpers
         {
             try
             {
+                // tfvbusviljzecgkr
 
                 // mail server -> Gmail
                 // protocol -> for data transfer :*SMTP* : Simple Mail Transfer Protocol 
