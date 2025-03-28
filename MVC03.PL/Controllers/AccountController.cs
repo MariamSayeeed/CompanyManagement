@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MVC03.DAL.Models;
 using MVC03.PL.Dtos;
+using MVC03.PL.Helpers;
 
 namespace MVC03.PL.Controllers
 {
@@ -128,7 +129,59 @@ namespace MVC03.PL.Controllers
 
         #endregion
 
+        #region Forget Password
 
+        [HttpGet]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendResetPasswordURL(ForgetPasswordDto model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var user =await _userManager.FindByEmailAsync(model.Email);
+                if (user is not null)
+                {
+                    // Generate Token 
+                    var token = _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    // Create URL 
+                    var url = Url.Action("ResetPassword" , "Account" , new { email = model.Email, token } , Request.Scheme);
+
+                    // Create obj from Email Class -> Email
+
+                    var email = new Email()
+                    {
+                        To = model.Email,
+                        Subject = "Reset Passord",
+                        Body = url
+                    };
+                    // Send Email
+
+                    var flag = EmailSettings.SendEmail(email);
+                    if (flag)
+                    {
+                        return View("CheckYourEmail");
+                    }
+
+                }
+
+
+            }
+
+            ModelState.AddModelError("", "Invalid Reset Password Operation !!");
+            return View("ForgetPassword" , model);
+        }
+
+
+
+
+
+        #endregion
 
     }
 }
