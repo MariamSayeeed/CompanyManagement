@@ -8,6 +8,9 @@ namespace MVC03.PL.Controllers
 {
 
     //  P@sW0rrd
+
+
+    // P@SSw0rd
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
@@ -147,7 +150,7 @@ namespace MVC03.PL.Controllers
                 if (user is not null)
                 {
                     // Generate Token 
-                    var token = _userManager.GeneratePasswordResetTokenAsync(user);
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
                     // Create URL 
                     var url = Url.Action("ResetPassword" , "Account" , new { email = model.Email, token } , Request.Scheme);
@@ -157,7 +160,7 @@ namespace MVC03.PL.Controllers
                     var email = new Email()
                     {
                         To = model.Email,
-                        Subject = "Reset Passord",
+                        Subject = "Reset Passwwwwwwwwwword",
                         Body = url
                     };
                     // Send Email
@@ -184,9 +187,56 @@ namespace MVC03.PL.Controllers
             return View();
         }
 
+        #endregion
+
+        #region Reset Password
+
+        [HttpGet]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            TempData["email"] = email;
+            TempData["token"] = token;
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var email = TempData["email"] as string;
+                var token = TempData["token"] as string;
+
+                if (email is null || token is null) return BadRequest("Invalid Opeartionnnnnnnn ");
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user is not null)
+                {
+
+                    var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(SignIn));
+                    }
+                    ModelState.AddModelError("", "Invalid Operatiooooon");
+
+
+                }
+                ModelState.AddModelError("", "Invalid Operation");
+
+            }
+
+            return View();
+        }
+
+
+
 
 
         #endregion
+
+
+
 
     }
 }
