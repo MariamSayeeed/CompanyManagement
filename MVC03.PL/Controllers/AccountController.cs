@@ -165,7 +165,7 @@ namespace MVC03.PL.Controllers
                     var flag = EmailSettings.SendEmail(email);
                     if (flag)
                     {
-                        return View("CheckYourEmail");
+                        return RedirectToAction("CheckYourEmail");
                     }
 
                 }
@@ -178,6 +178,11 @@ namespace MVC03.PL.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult CheckYourEmail()
+        {
+            return View();
+        }
 
 
 
