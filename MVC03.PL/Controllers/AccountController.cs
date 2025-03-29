@@ -160,7 +160,7 @@ namespace MVC03.PL.Controllers
                     var email = new Email()
                     {
                         To = model.Email,
-                        Subject = "Reset Passwwwwwwwwwword",
+                        Subject = "Reset Password",
                         Body = url
                     };
                     // Send Email
@@ -170,6 +170,7 @@ namespace MVC03.PL.Controllers
                     {
                         return RedirectToAction("CheckYourEmail");
                     }
+
 
                 }
 
