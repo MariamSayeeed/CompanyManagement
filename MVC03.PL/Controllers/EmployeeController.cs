@@ -28,6 +28,8 @@ namespace MVC03.PL.Controllers
             //_departmentRepo = departmentRepo;
             _mapper = mapper;
         }
+
+        [HttpGet]
         public async Task<IActionResult> Index(string? searchInput)
         {
             IEnumerable<Employee> employees;
