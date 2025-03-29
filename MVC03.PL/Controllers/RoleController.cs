@@ -206,13 +206,15 @@ namespace MVC03.PL.Controllers
             var role = await _roleManager.FindByIdAsync(roleId);
             if (role is null) return BadRequest("Not Found");
 
+            ViewData["RoleId"] = roleId;
+
             var usersInRoleList = new List<UsersInRoleDto>();
             var users = await _userManager.Users.ToListAsync();
             foreach (var user in users)
             {
                 var userInRole = new UsersInRoleDto()
                 {
-                    UserID = user.Id,
+                    UserId = user.Id,
                     UserName = user.UserName,
 
                 };
@@ -235,11 +237,40 @@ namespace MVC03.PL.Controllers
             return View(usersInRoleList);
         }
 
-        //[HttpPost]
-        //public IActionResult AddOrRemoveUser()
-        //{
-        //    return View();
-        //}
+        [HttpPost]
+        public async Task<IActionResult> AddOrRemoveUser(string roleId , List<UsersInRoleDto> users)
+        {
+            var role = await _roleManager.FindByIdAsync(roleId);
+            if (role is null) return BadRequest("Not Found");
+
+            if (ModelState.IsValid)
+            {
+                foreach (var user in users)
+                {
+                    var AppUser = await _userManager.FindByIdAsync(user.UserId);
+                    if (AppUser is not null)
+                    {
+                        if (user.IsSelected && ! await _userManager.IsInRoleAsync(AppUser , role.Name))
+                        {
+                           await _userManager.AddToRoleAsync(AppUser, role.Name);
+
+                        }
+                         else if (!user.IsSelected && await _userManager.IsInRoleAsync(AppUser, role.Name))
+                        {
+                           await _userManager.RemoveFromRoleAsync(AppUser, role.Name);
+                        }
+                    }
+                   // ModelState.AddModelError("", "Invalid Opearation");
+
+                }
+
+                return RedirectToAction("Edit", new { id = roleId});
+
+            }
+
+
+            return View(users);
+        }
 
     }
 }
