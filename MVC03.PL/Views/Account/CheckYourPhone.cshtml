@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "CheckYourPhone";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Check</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background:linear-gradient(135 deg ,#ff36,#ff70 );
+            color :white ;
+            font-family : Arial,sans-serif
+        }
+
+        .container {
+            text-align: center;
+            border: 5px solid #ff42;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            background-color: white;
+            position: relative;
+            backdrop-filter:blur(15px) ;
+        }
+
+        h1 {
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 4em;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="animatedText">Check Your Phone</h1>
+    </div>
+
+    <script>
+        window.onload = function () {
+            const textElement = document.getElementById('animatedText');
+            textElement.classList.add('show');
+
+            let isLight = true;
+            const colorChangeInterval = setInterval(() => {
+                textElement.style.color = isLight ? '#ff46' : '#ff36';
+                isLight = !isLight;
+            }, 500);
+
+            setTimeout(() => clearInterval(colorChangeInterval), 10000);
+        };
+    </script>
+</body>
+</html>

@@ -1,8 +1,52 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<br />
+<br />
+<br />
+<br />
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <div class="text-center mt-5 fade-in" id="animatedText">
+        <h1 class="display-4" id="textElement" style="font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-size:60px; color:deeppink;">
+            Welcome To Our Company @* Honey *@
+        </h1>
+        <div class="my-3">
+            <i class="fa-regular fa-heart fa-4x" style="color:deeppink;"></i>
+            <i class="fa-regular fa-heart fa-4x" style="color:deeppink;"></i>
+            <i class="fa-regular fa-heart fa-4x" style="color:deeppink;"></i>
+            @* <i class="fa-regular fa-face-smile-wink fa-5x"></i> *@
+        </div>
+    </div>
+
+    <style>
+        .fade-in {
+            opacity: 0;
+            transition: opacity 2s;
+        }
+
+            .fade-in.show {
+                opacity: 1;
+            }
+    </style>
+
+    <script>
+        window.onload = function () {
+            const textElement = document.getElementById('animatedText');
+            const contentElement = document.getElementById('textElement');
+            textElement.classList.add('show');
+
+            let isLight = true;
+            const colorChangeInterval = setInterval(() => {
+                contentElement.style.color = isLight ? 'deeppink' : 'lightpink';
+                isLight = !isLight;
+            }, 500);
+
+            setTimeout(() => clearInterval(colorChangeInterval), 10000);
+        };
+    </script>
+
+
+
 </div>

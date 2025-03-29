@@ -173,22 +173,5 @@ namespace MVC03.PL.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
