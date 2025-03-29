@@ -22,7 +22,7 @@ namespace MVC03.PL
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddIdentity<AppUser, IdentityRole>()
                             .AddEntityFrameworkStores<CompanyDbContext>()
-                            .AddDefaultTokenProviders();
+                            .AddDefaultTokenProviders();  // Enable Token
            
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {

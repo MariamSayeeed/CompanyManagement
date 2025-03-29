@@ -4,6 +4,18 @@
 }
 
 
-<td><a asp-action="Details" asp-route-id="@Model" class="btn btn-warning">Details</a></td>
-<td><a asp-action="Edit" asp-route-id="@Model" class="btn btn-success">Update</a></td>
-<td><a asp-action="Delete" asp-route-id="@Model" class="btn btn-danger">Delete</a></td>
+<td>
+    <a asp-action="Details" asp-route-id="@Model" class="btn" style="background-color: #FF69B4; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#FF1493'" onmouseout="this.style.backgroundColor='#FF69B4'">
+        <i class="fas fa-eye"></i>Details
+    </a>
+</td>
+<td>
+    <a asp-action="Edit" asp-route-id="@Model" class="btn" style="background-color:plum; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='rebeccapurple'" onmouseout="this.style.backgroundColor='plum'">
+        <i class="fas fa-edit"></i>Update
+    </a>
+</td>
+<td>
+    <a asp-action="Delete" asp-route-id="@Model" class="btn" style="background-color:plum; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='rebeccapurple'" onmouseout="this.style.backgroundColor='plum'">
+        <i class="fas fa-edit"></i> Delete
+    </a>
+</td>

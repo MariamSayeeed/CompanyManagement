@@ -132,6 +132,7 @@ namespace MVC03.PL.Controllers
 
         #endregion
 
+
         #region Forget Password
 
         [HttpGet]
@@ -190,6 +191,7 @@ namespace MVC03.PL.Controllers
 
         #endregion
 
+
         #region Reset Password
 
         [HttpGet]
@@ -209,7 +211,7 @@ namespace MVC03.PL.Controllers
                 var email = TempData["email"] as string;
                 var token = TempData["token"] as string;
 
-                if (email is null || token is null) return BadRequest("Invalid Opeartionnnnnnnn ");
+                if (email is null || token is null) return BadRequest("Invalid Opeartion");
                 var user = await _userManager.FindByEmailAsync(email);
                 if (user is not null)
                 {
@@ -219,7 +221,7 @@ namespace MVC03.PL.Controllers
                     {
                         return RedirectToAction(nameof(SignIn));
                     }
-                    ModelState.AddModelError("", "Invalid Operatiooooon");
+                    ModelState.AddModelError("", "Invalid Operation");
 
 
                 }
@@ -232,11 +234,7 @@ namespace MVC03.PL.Controllers
 
 
 
-
-
         #endregion
-
-
 
 
     }
