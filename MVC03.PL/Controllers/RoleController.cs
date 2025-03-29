@@ -1,18 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MVC03.DAL.Models;
 using MVC03.PL.Dtos;
 using MVC03.PL.Helpers;
+using System.Drawing;
 
 namespace MVC03.PL.Controllers
 {
     public class RoleController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public RoleController(RoleManager<IdentityRole> roleManager) 
+        public RoleController(RoleManager<IdentityRole> roleManager , UserManager<AppUser> userManager) 
         {
             _roleManager = roleManager;
+            _userManager = userManager;
         }
 
 
@@ -196,7 +200,46 @@ namespace MVC03.PL.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> AddOrRemoveUser(string roleId)
+        {
+            var role = await _roleManager.FindByIdAsync(roleId);
+            if (role is null) return BadRequest("Not Found");
 
+            var usersInRoleList = new List<UsersInRoleDto>();
+            var users = await _userManager.Users.ToListAsync();
+            foreach (var user in users)
+            {
+                var userInRole = new UsersInRoleDto()
+                {
+                    UserID = user.Id,
+                    UserName = user.UserName,
+
+                };
+
+                if (await _userManager.IsInRoleAsync(user, role.Name)) 
+                {
+                    userInRole.IsSelected = true;
+                }
+                else
+                {
+                    userInRole.IsSelected= false;
+                }
+
+
+                usersInRoleList.Add(userInRole);
+
+            }
+
+
+            return View(usersInRoleList);
+        }
+
+        //[HttpPost]
+        //public IActionResult AddOrRemoveUser()
+        //{
+        //    return View();
+        //}
 
     }
 }

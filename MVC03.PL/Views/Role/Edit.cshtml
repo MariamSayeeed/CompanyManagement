@@ -9,7 +9,11 @@
 
 <form asp-action="Edit" enctype="multipart/form-data">
 
-    <partial name="RolePartialView/_CreateEditPartialView" />
+    <partial name="RolePartialView/_CreateEditPartialView" model="@Model"/>
+
+    <a asp-action="AddOrRemoveUser" asp-route-roleId="@Model.Id" class="btn btn-success">Add or Remove User </a>
+
+
     <div class="my-3">
         <input type="submit" class="btn btn-primary" value="Save" />
         @* <a asp-action="Edit" class="btn btn-warning">Save</a> *@

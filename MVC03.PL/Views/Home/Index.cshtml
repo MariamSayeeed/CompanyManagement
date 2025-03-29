@@ -1,52 +1,74 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<br />
-<br />
-<br />
-<br />
 
-<div class="text-center">
-
-    <div class="text-center mt-5 fade-in" id="animatedText">
-        <h1 class="display-4" id="textElement" style="font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-size:60px; color:deeppink;">
+<div class="text-center animate-on-scroll" style="margin-top: 100px;">
+    <div class="fade-in" id="animatedText">
+        <h1 class="display-4" id="textElement"
+            style="font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+                   font-size:60px;
+                   color:deeppink;
+                   text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">
             Welcome To Our Company @* Honey *@
         </h1>
-        <div class="my-3">
-            <i class="fa-regular fa-heart fa-4x" style="color:deeppink;"></i>
-            <i class="fa-regular fa-heart fa-4x" style="color:deeppink;"></i>
-            <i class="fa-regular fa-heart fa-4x" style="color:deeppink;"></i>
-            @* <i class="fa-regular fa-face-smile-wink fa-5x"></i> *@
+        <div class="my-3 heart-container">
+            @* <i class="fa-regular fa-heart fa-4x beat" style="color:deeppink;"></i> *@
+            @* <i class="fa-regular fa-heart fa-4x beat" style="color:deeppink; animation-delay: 0.2s"></i> *@
+            <i class="fa-regular fa-heart fa-4x beat" style="color:deeppink; animation-delay: 0.4s"></i>
         </div>
     </div>
+</div>
 
+@section Styles {
     <style>
+        /* Your style definitions */
         .fade-in {
             opacity: 0;
-            transition: opacity 2s;
+            transition: opacity 1.5s ease-out;
         }
 
-            .fade-in.show {
+            .fade-in.loaded {
                 opacity: 1;
             }
-    </style>
 
+        @@keyframes beat {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .beat {
+            animation: beat 1s ease-in-out infinite;
+        }
+    </style>
+}
+
+@section Scripts {
     <script>
-        window.onload = function () {
+        // Your script content
+        document.addEventListener('DOMContentLoaded', function() {
             const textElement = document.getElementById('animatedText');
-            const contentElement = document.getElementById('textElement');
-            textElement.classList.add('show');
+            textElement.classList.add('loaded');
 
             let isLight = true;
+            const contentElement = document.getElementById('textElement');
             const colorChangeInterval = setInterval(() => {
-                contentElement.style.color = isLight ? 'deeppink' : 'lightpink';
+                contentElement.style.color = isLight ? 'deeppink' : '#ff69b480';
                 isLight = !isLight;
-            }, 500);
+            }, 800);
 
-            setTimeout(() => clearInterval(colorChangeInterval), 10000);
-        };
+            setTimeout(() => {
+                clearInterval(colorChangeInterval);
+                contentElement.style.color = 'deeppink';
+            }, 10000);
+        });
     </script>
-
-
-
-</div>
+}

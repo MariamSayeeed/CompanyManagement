@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,85 +7,222 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MVC03.PL.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <style>
+        /* Corrected CSS with proper escaping */
+        :root {
+            --primary-color: #8B452D;
+            --secondary-color: #D68A59;
+        }
+
+        body {
+            padding-top: 80px;
+            background: #f8f9fa;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, rgba(139, 69, 39, 0.9) 0%, rgba(214, 138, 89, 0.9) 100%);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            animation: navbarSlide 0.5s ease-out;
+        }
+
+        @@keyframes navbarSlide {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .nav-link {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            margin: 0 5px;
+            border-radius: 20px;
+        }
+
+            .nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+                transform: translateY(-2px);
+                color: white !important;
+            }
+
+            .nav-link::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 50%;
+                width: 0;
+                height: 2px;
+                background: white;
+                transition: all 0.3s;
+            }
+
+            .nav-link:hover::after {
+                width: 60%;
+                left: 20%;
+            }
+
+        .btn-signout {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 8px 25px !important;
+            transition: all 0.3s;
+            color: white !important;
+            border: 1px solid white;
+        }
+
+            .btn-signout:hover {
+                background: rgba(255, 0, 0, 0.8);
+                transform: scale(1.05);
+            }
+
+        footer {
+            background: linear-gradient(135deg, rgba(139, 69, 39, 0.9) 0%, rgba(214, 138, 89, 0.9) 100%);
+            color: white !important;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+            .animate-on-scroll.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        .scrolled-nav {
+            background: rgba(139, 69, 39, 0.95);
+            height: 60px;
+        }
+    </style>
+    @RenderSection("Styles", required: false)
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3"
-             style="background-color: rgba(139, 69, 39, 0.8); color: purple;
-        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-size: x-large;">
+        <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC03.PL</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" id="navbarSupportedContent">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Department" asp-action="Index">Departments</a>
+                            <a class="nav-link text-dark" asp-controller="Department" asp-action="Index">Departments</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Index">Employees</a>
+                            <a class="nav-link text-dark" asp-controller="Employee" asp-action="Index">Employees</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">User</a>
+                            <a class="nav-link text-dark" asp-controller="User" asp-action="Index">Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="Index">Role</a>
+                            <a class="nav-link text-dark" asp-controller="Role" asp-action="Index">Roles</a>
                         </li>
-
                         <li class="nav-item ms-auto">
-                            <a class="nav-link text-dark btn-danger" asp-area="" asp-controller="Account" asp-action="SignOut">SignOut</a>
+                            <a class="nav-link btn-signout" asp-controller="Account" asp-action="SignOut">SignOut</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-
-        <style>
-            .nav-link {
-                transition: background-color 0.3s;
-            }
-
-                .nav-link:hover {
-                    background-color: rgba(214, 138, 89, 0.8);
-                    color: white;
-                }
-        </style>
-
     </header>
-    @* @End Header *@
 
-    @* @Start Body *@
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <div class="container">
         <main role="main" class="pb-3">
-
-            <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
             @RenderBody()
         </main>
     </div>
-    @* @End Body *@
 
-    @* @Start Footer  *@
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - MVC03.PL - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <b style=" color : black"> &copy; 2025 - MVC03.PL -</b> <a class="text-light" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    @* @End Footer  *@
 
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @await RenderSectionAsync("ValidationSection", required: false)
-</body>
-</html>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        // Enhanced JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navbar scroll effect
+            const navbar = document.querySelector('.navbar');
+            window.addEventListener('scroll', () => {
+                navbar.classList.toggle('scrolled-nav', window.scrollY > 50);
+            });
 
+            // Intersection Observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    entry.target.classList.toggle('visible', entry.isIntersecting);
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Card hover effects
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'none';
+                });
+            });
+        });
+
+        // Page load animation
+        window.onload = () => {
+            document.body.style.opacity = '1';
+        };
+    </script>
+    @await RenderSectionAsync("ValidationSection", required: false)
+    @* Add this right before </head> *@
+
+    @* Add this right before </body> *@
+</body>
+@RenderSection("Scripts", required: false)
+</html>

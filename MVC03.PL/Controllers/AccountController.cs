@@ -10,7 +10,7 @@ namespace MVC03.PL.Controllers
     //  P@sW0rrd
 
 
-    // P@SSw0rd
+    // P@SSw0rddd
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
