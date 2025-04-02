@@ -15,11 +15,15 @@ namespace MVC03.PL.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IMailService _mailService;
+        private readonly ITwilioService _twilioService;
 
-        public AccountController(UserManager<AppUser> userManager , SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager , IMailService mailService, ITwilioService twilioService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _mailService = mailService;
+            _twilioService = twilioService;
         }
 
         #region Sign Up
@@ -31,16 +35,16 @@ namespace MVC03.PL.Controllers
         [HttpPost]
         public async Task<ActionResult> SignUp(SignUpDto model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(model.UserName);
 
                 if (user is null)
                 {
-                    user =await _userManager.FindByEmailAsync(model.Email);
+                    user = await _userManager.FindByEmailAsync(model.Email);
                     if (user is null)
                     {
-                         user = new AppUser()
+                        user = new AppUser()
                         {
                             UserName = model.UserName,
                             FirstName = model.FirstName,
@@ -125,7 +129,7 @@ namespace MVC03.PL.Controllers
         [HttpGet]
         public new async Task<ActionResult> SignOut()
         {
-           await _signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(SignIn));
 
         }
@@ -136,7 +140,7 @@ namespace MVC03.PL.Controllers
         #region Forget Password
 
         [HttpGet]
-        public IActionResult ForgetPassword()
+        public IActionResult ForgetPasswordUsingEmail()
         {
             return View();
         }
@@ -147,14 +151,14 @@ namespace MVC03.PL.Controllers
 
             if (ModelState.IsValid)
             {
-                var user =await _userManager.FindByEmailAsync(model.Email);
+                var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user is not null)
                 {
                     // Generate Token 
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
                     // Create URL 
-                    var url = Url.Action("ResetPassword" , "Account" , new { email = model.Email, token } , Request.Scheme);
+                    var url = Url.Action("ResetPassword", "Account", new { email = model.Email, token }, Request.Scheme);
 
                     // Create obj from Email Class -> Email
 
@@ -179,7 +183,7 @@ namespace MVC03.PL.Controllers
             }
 
             ModelState.AddModelError("", "Invalid Reset Password Operation !!");
-            return View("ForgetPassword" , model);
+            return View("ForgetPasswordUsingEmail", model);
         }
 
 
@@ -190,6 +194,20 @@ namespace MVC03.PL.Controllers
         }
 
         #endregion
+
+        [HttpGet]
+        public IActionResult ConfirmForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ForgetPasswordUsingSMS()
+        {
+            return View();
+        }
+
+
 
 
         #region Reset Password
@@ -236,6 +254,50 @@ namespace MVC03.PL.Controllers
 
         #endregion
 
+        [HttpPost]
+        public async Task<IActionResult> SendResetPasswordSMS(ForgetPasswordDto model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user is not null)
+                {
+                    // Generate Token 
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    // Create URL 
+                    var url = Url.Action("ResetPassword", "Account", new { email = model.Email, token }, Request.Scheme);
+
+                    // Create obj from Email Class -> Email
+
+                    var sms = new SMS()
+                    {
+                        To = user.PhoneNumber,
+                       
+                        Body = url
+                    };
+                    // Send Email
+
+                    _twilioService.SendSMS(sms);
+                   
+                    return RedirectToAction("CheckYourPhone");
+
+                }
+
+
+            }
+
+            ModelState.AddModelError("", "Invalid Reset Password Operation !!");
+            return View("ForgetPasswordSMS", model);
+        }
+
+        [HttpGet]
+
+        public IActionResult CheckYourPhone()
+        {
+            return View(); 
+        }
 
     }
 }

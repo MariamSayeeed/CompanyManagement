@@ -4,7 +4,10 @@ using MVC03.BLL.Interfaces;
 using MVC03.BLL.Repositories;
 using MVC03.DAL.Data.Contexts;
 using MVC03.DAL.Models;
+using MVC03.PL.Helpers;
 using MVC03.PL.Mapping;
+using MVC03.PL.Settings;
+using System.Configuration;
 
 namespace MVC03.PL
 {
@@ -38,8 +41,14 @@ namespace MVC03.PL
                 config.LoginPath = ("/Account/SignIn");
             });
 
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
+            builder.Services.AddScoped<IMailService, MailService>();
 
-            ////-  Build --------
+            builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection(nameof(TwilioSettings)));
+            builder.Services.AddScoped<ITwilioService, TwilioService>();
+
+
+            ////- -------------------------------   Build --------
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
