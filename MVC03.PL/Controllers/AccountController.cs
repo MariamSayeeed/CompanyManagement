@@ -289,7 +289,7 @@ namespace MVC03.PL.Controllers
             }
 
             ModelState.AddModelError("", "Invalid Reset Password Operation !!");
-            return View("ForgetPasswordSMS", model);
+            return View("ForgetPasswordUsingSMS", model);
         }
 
         [HttpGet]
