@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC03.DAL.Models;
 using MVC03.PL.Dtos;
 using MVC03.PL.Helpers;
+using System.Security.Claims;
 
 namespace MVC03.PL.Controllers
 {
@@ -298,6 +301,45 @@ namespace MVC03.PL.Controllers
         {
             return View(); 
         }
+
+        #region Login with External Google
+
+        [HttpGet]
+        public IActionResult GoogleLogin()
+        {
+            var prop = new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("GoogleResponse")
+            };
+            return Challenge (prop, GoogleDefaults.AuthenticationScheme);
+        }
+
+       // [HttpPost]
+
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var Result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            var claims = Result.Principal.Identities.FirstOrDefault().Claims.Select(
+                claim => new
+                {
+                    claim.Type,
+                    claim.Value,
+                    claim.Issuer,
+                    claim.OriginalIssuer,
+                    claim.Subject
+                }
+                );
+
+            return RedirectToAction("Index","Home");
+
+        }
+
+
+        #endregion
+
+
+
+
 
     }
 }

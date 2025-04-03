@@ -6,4 +6,7 @@ namespace MVC03.PL.Models
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
+
+
 }
+

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MVC03.BLL.Interfaces;
@@ -26,15 +27,15 @@ namespace MVC03.PL
             builder.Services.AddIdentity<AppUser, IdentityRole>()
                             .AddEntityFrameworkStores<CompanyDbContext>()
                             .AddDefaultTokenProviders();  // Enable Token
-           
+
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             }); // Allow Dependency Injection for CompanyDbContext
 
             //builder.Services.AddAutoMapper(typeof(EmployeeProfile));
-            builder.Services.AddAutoMapper(M=> M.AddProfile(new EmployeeProfile()));
-            builder.Services.AddAutoMapper(M=> M.AddProfile(new DepartmentProfile()));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new EmployeeProfile()));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new DepartmentProfile()));
 
             builder.Services.ConfigureApplicationCookie(config =>
             {
@@ -46,6 +47,18 @@ namespace MVC03.PL
 
             builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection(nameof(TwilioSettings)));
             builder.Services.AddScoped<ITwilioService, TwilioService>();
+
+            builder.Services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+
+            }).AddGoogle( o=>
+                {
+                    o.ClientId = builder.Configuration["Authentication:Google:ClientID"];
+                    o.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+            }
+            );
 
 
             ////- -------------------------------   Build --------
