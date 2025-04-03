@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC03.DAL.Models;
 using MVC03.PL.Dtos;
@@ -6,6 +7,8 @@ using MVC03.PL.Helpers;
 
 namespace MVC03.PL.Controllers
 {
+    [Authorize]
+
     public class UserController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
