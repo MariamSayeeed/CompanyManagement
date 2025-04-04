@@ -7,8 +7,6 @@ using MVC03.PL.Helpers;
 
 namespace MVC03.PL.Controllers
 {
-    [Authorize]
-
     public class UserController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
@@ -145,6 +143,8 @@ namespace MVC03.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete([FromRoute] string id, UserToReturnDto model)
         {
            

@@ -58,8 +58,27 @@ namespace MVC03.PL.Controllers
 
 
         }
+        public async Task<IActionResult> Search(string? searchInput)
+        {
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrEmpty(searchInput))
+            {
+                employees = await _unitOfWork.EmployeeRepository.GetAllAsync();
+
+            }
+
+            else
+            {
+                employees = await _unitOfWork.EmployeeRepository.GetByNameAsync(searchInput);
+            }
+
+            return PartialView("EmployeeTablePartialView", employees);
+
+        }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Create()
         {
             var departments = await _unitOfWork.DepartmentRepository.GetAllAsync();
@@ -69,6 +88,8 @@ namespace MVC03.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Create(CreateEmployeeDto model)
         {
             if(ModelState.IsValid )
@@ -203,6 +224,8 @@ namespace MVC03.PL.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             return await Details(id, "Delete");
