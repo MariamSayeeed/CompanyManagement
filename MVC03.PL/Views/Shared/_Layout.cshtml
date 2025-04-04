@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -147,10 +148,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="User" asp-action="Index">Users</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item ">
                             <a class="nav-link text-dark" asp-controller="Role" asp-action="Index">Roles</a>
                         </li>
-                        <li class="nav-item ms-auto">
+                        
+                        @if (User.Identity.IsAuthenticated)
+                            {
+                            <a class="nav-link  ms-auto" style="font-size: 16px; font-weight: bold; color: #fff; padding: 8px 15px;">
+                                    <i class="fa fa-user" style="margin-right: 8px;"></i>@User.Identity.Name 
+                                </a>
+                            }
+                                                <li class="nav-item ms-auto">
                             <a class="nav-link btn-signout" asp-controller="Account" asp-action="SignOut">SignOut</a>
                         </li>
                     </ul>
@@ -169,7 +177,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            <b style=" color : black"> &copy; 2025 - MVC03.PL -</b> <a class="text-light" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <b style=" color : black"> &copy; 2025 - MVC03.PL -</b> <a class="text-light" asp-controller="Home" asp-action="Privacy">Privacy</a><b style=" color : black; margin-left: 20px; "></b>
         </div>
     </footer>
 

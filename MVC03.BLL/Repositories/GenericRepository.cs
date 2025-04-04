@@ -25,6 +25,9 @@ namespace MVC03.BLL.Repositories
             {
                 return  (IEnumerable<TEntity>) await _context.Employees.Include(E=> E.Department).ToListAsync();
             }
+
+
+
             return await _context.Set<TEntity>().ToListAsync();
         }
 

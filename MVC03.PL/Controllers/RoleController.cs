@@ -1,17 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC03.DAL.Models;
 using MVC03.PL.Dtos;
-using Microsoft.AspNetCore.Authorization;
-
 using MVC03.PL.Helpers;
 using System.Drawing;
 
 namespace MVC03.PL.Controllers
 {
-    [Authorize]
-
     public class RoleController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -166,6 +163,8 @@ namespace MVC03.PL.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(string? id)
         {
             return await Details(id, "Delete");
@@ -174,6 +173,8 @@ namespace MVC03.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete([FromRoute] string id, RoleToReturnDto model)
         {
 

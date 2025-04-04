@@ -9,7 +9,7 @@ using MVC03.PL.Dtos;
 
 namespace MVC03.PL.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     public class DepartmentController : Controller
     {
         //private readonly IDepartmentRepository _deptRepository;
@@ -181,6 +181,9 @@ namespace MVC03.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+
+
         public async Task<IActionResult> Delete([FromRoute]int id,Department model)
         {
             if (ModelState.IsValid) // server side validation
