@@ -1,89 +1,73 @@
 ﻿@model CreateEmployeeDto
 
 @{
-    // var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name");
-     var Departments = new SelectList((ViewData["departments"] as IEnumerable<Department>) ?? Enumerable.Empty<Department>(), "Id", "Name");
-
+    var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>,"Id","Name");
 }
-@* @inject IDepartmentRepository _departmentRepo *@
 
-@* @{ *@
+@if (Model != null && @Model.ImageName is not null)
+{
 
-@*     var Departments = new SelectList(_departmentRepo.GetAll() as IEnumerable<Department>, "Id", "Name"); *@
-@*     //  var departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name"); *@
-@* } *@
+    <div class="employee-image text-center my-3">
+        <img src="~/files/images/@Model.ImageName" class="img-fluid rounded-circle" alt="" style="max-width: 200px; max-height: 150px; object-fit: cover;" />
+    </div>
+}
+else {
+    <div class="my-3">
+        <label asp-for="Name" class="col-form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="my-3">
+        <label asp-for="Salary" class="col-form-label"></label>
+        <input asp-for="Salary" class="form-control" />
+        <span asp-validation-for="Salary" class="text-danger"></span>
 
-<div class="my-3">
-    <label asp-for="Name" class="col-form-label">Name</label>
-    <input type="text" asp-for="Name" class="form-control" />
-    <span asp-validation-for="Name" class="text-danger"></span>
-</div>
-<div class="my-3">
-    <label asp-for="Age" class="col-form-label">Age</label>
-    <input type="text" asp-for="Age" class="form-control" />
-    <span asp-validation-for="Age" class="text-danger"></span>
-</div>
-<div class="my-3">
-    <label asp-for="Salary" class="col-form-label">Salary</label>
-    <input type="text" asp-for="Salary" class="form-control" />
-    <span asp-validation-for="Salary" class="text-danger"></span>
-</div>
-<div class="my-3">
-    <label asp-for="Address" class="col-form-label">Address</label>
-    <input type="text" asp-for="Address" class="form-control" />
-    <span asp-validation-for="Address" class="text-danger"></span>
-</div>
+    </div>
+    <div class="my-3">
+        <label asp-for="Email" class="col-form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
 
-<div class="my-3">
-    <label asp-for="Email" class="col-form-label">Email</label>
-    <input type="text" asp-for="Email" class="form-control" />
-    <span asp-validation-for="Email" class="text-danger"></span>
-
-</div>
-<div class="my-3">
-    <label asp-for="Phone" class="col-form-label">Phone</label>
-    <input type="text" asp-for="Phone" class="form-control" />
-    <span asp-validation-for="Phone" class="text-danger"></span>
-
-</div>
-<div class="my-3">
-    <label asp-for="IsActive" class="col-form-label">IsActive</label>
-    <input type="checkbox" asp-for="IsActive" class="" />
-    <span asp-validation-for="IsActive" class="text-danger"></span>
-
-</div>
-<div class="my-3">
-    <label asp-for="IsDeleted" class="col-form-label">IsDeleted</label>
-    <input type="checkbox" asp-for="IsDeleted" class="" />
-    <span asp-validation-for="IsDeleted" class="text-danger"></span>
-
-</div>
-
-
-<div class="my-3">
-    <label asp-for="HiringDate" class="col-form-label">HiringDate</label>
-    <input asp-for="HiringDate" class="form-control" />
-    <span asp-validation-for="HiringDate" class="text-danger"></span>
-
-</div>
-
-<div class="my-3">
-    <label asp-for="CreateAt" class="col-form-label">Created At</label>
-    <input asp-for="CreateAt" class="form-control" />
-    <span asp-validation-for="CreateAt" class="text-danger"></span>
-</div>
-
-<div class="my-3">
-    <label asp-for="DepartmentId" class="col-form-label">Department</label>
-    <select asp-for="DepartmentId" asp-items="Departments">
-
-    </select>
-</div>
-
-<div class="my-3">
-    <label asp-for="Image" class="col-form-label"></label>
-    <input asp-for="Image" type="file" class="form-control" />
-</div>
-
+    </div>
+    <div class="my-3">
+        <label asp-for="Age" class="col-form-label"></label>
+        <input asp-for="Age" class="form-control" />
+    </div>
+    <div class="my-3">
+        <label asp-for="Address" class="col-form-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="my-3">
+        <label asp-for="Phone" class="col-form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <label class="form-check-label">
+        <input asp-for="IsActive" class="form-check-input" />
+        Is Active
+    </label>
+    <div class="my-3">
+        <label asp-for="CreateAt" class="col-form-label"></label>
+        <input asp-for="CreateAt" class="form-control" />
+        <span asp-validation-for="CreateAt" class="text-danger"></span>
+    </div>
+    <div class="my-3">
+        <label asp-for="HiringDate" class="col-form-label"></label>
+        <input asp-for="HiringDate" class="form-control" />
+        <span asp-validation-for="CreateAt" class="text-danger"></span>
+    </div>
+    <div class="my-3">
+        <label asp-for="DepartmentId" class="col-form-label"></label>
+        <select asp-for="DepartmentId" asp-items="Departments" class="form-control">
+            <option value="@null">--- Select Department ---</option>
+        </select>
+    </div>
+    <div class="my-3">
+        <label asp-for="Image" class="col-form-label"></label>
+        <input asp-for="Image" class="form-control" />
+    </div>
+}
+ 
 
 

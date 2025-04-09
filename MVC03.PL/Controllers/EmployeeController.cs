@@ -9,7 +9,7 @@ using MVC03.PL.Helpers;
 namespace MVC03.PL.Controllers
 {
     [Authorize]
-    public class EmployeeController : Controller 
+    public class EmployeeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -35,13 +35,13 @@ namespace MVC03.PL.Controllers
             IEnumerable<Employee> employees;
             if (string.IsNullOrEmpty(searchInput))
             {
-                 employees = await _unitOfWork.EmployeeRepository.GetAllAsync();
+                employees = await _unitOfWork.EmployeeRepository.GetAllAsync();
 
             }
 
             else
             {
-                 employees = await _unitOfWork.EmployeeRepository.GetByNameAsync(searchInput);
+                employees = await _unitOfWork.EmployeeRepository.GetByNameAsync(searchInput);
             }
             // Dictionary : 
             // Storage => ViewData , ViewBag , TempData
@@ -92,17 +92,17 @@ namespace MVC03.PL.Controllers
 
         public async Task<IActionResult> Create(CreateEmployeeDto model)
         {
-            if(ModelState.IsValid )
+            if (ModelState.IsValid)
             {
 
                 try
                 {
-                   if (model.Image is not null)
+                    if (model.Image is not null)
                     {
                         model.ImageName = DocumentSettings.UploadFile(model.Image, "images");
                     }
 
-                   var employee= _mapper.Map<Employee>(model);
+                    var employee = _mapper.Map<Employee>(model);
 
                     await _unitOfWork.EmployeeRepository.AddAsync(employee);
                     var count = await _unitOfWork.CompleteAsync();
@@ -116,17 +116,17 @@ namespace MVC03.PL.Controllers
                 {
                     ModelState.AddModelError("", ex.Message);
                 }
-               
+
             }
             return View(model);
         }
 
 
         [HttpGet]
-        public async Task <IActionResult> Details(int? id , string viewname = "Details")
+        public async Task<IActionResult> Details(int? id, string viewname = "Details")
         {
             if (id is null) return BadRequest();
-            var employee = await _unitOfWork.EmployeeRepository.GetAsync(id.Value); 
+            var employee = await _unitOfWork.EmployeeRepository.GetAsync(id.Value);
 
             if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
 
@@ -145,7 +145,7 @@ namespace MVC03.PL.Controllers
             if (id is null) return BadRequest();
             var employee = await _unitOfWork.EmployeeRepository.GetAsync(id.Value);
             if (employee == null) return NotFound(new { statusCode = 400, messege = $"Employee With Id:{id} is Not Found" });
-            
+
             var employeeDto = _mapper.Map<CreateEmployeeDto>(employee);
 
             return View(employeeDto);
@@ -163,10 +163,10 @@ namespace MVC03.PL.Controllers
                     DocumentSettings.DeleteFile(model.ImageName, "images");
                 }
 
-                if (model.Image is not null )
+                if (model.Image is not null)
                 {
 
-                    model.ImageName = DocumentSettings.UploadFile(model.Image,"images" );
+                    model.ImageName = DocumentSettings.UploadFile(model.Image, "images");
                 }
 
                 var departments = await _unitOfWork.DepartmentRepository.GetAllAsync();
@@ -234,7 +234,7 @@ namespace MVC03.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public  async Task<IActionResult> Delete([FromRoute] int id, CreateEmployeeDto model)
+        public async Task<IActionResult> Delete([FromRoute] int id, CreateEmployeeDto model)
         {
             var employee = _mapper.Map<Employee>(model);
 
@@ -251,7 +251,7 @@ namespace MVC03.PL.Controllers
 
                 if (count > 0)
                 {
-                    if (model.ImageName is not null )
+                    if (model.ImageName is not null)
                     {
                         DocumentSettings.DeleteFile(model.ImageName, "images");
                     }

@@ -11,6 +11,6 @@ namespace MVC03.DAL.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public bool IsArgee { get; set; }
+        public bool IsAgree { get; set; }
     }
 }
