@@ -1,4 +1,8 @@
-﻿
+﻿@* @if (TempData["FirstName"] != null) *@
+@* { *@
+@*     <a class="nav-link text-dark" href="#">Welcome, @TempData["FirstName"]</a> *@
+@* } *@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -151,13 +155,14 @@
                         <li class="nav-item ">
                                 <a class="nav-link text-dark" asp-controller="Role" asp-action="Index"><b>Roles</b></a>
                         </li>
-                        
-                        @if (User.Identity.IsAuthenticated)
-                            {
-                            <a class="nav-link  ms-auto" style="font-size: 16px; font-weight: bold; color: #fff; padding: 8px 15px;">
-                                    <i class="fa fa-user" style="margin-right: 8px;"></i><b>@User.Identity.Name </b>
-                                </a>
-                            }
+
+                        @if (TempData["FirstName"] != null)
+                        {
+                            <a class="nav-link ms-auto" style="font-size: 16px; font-weight: bold; color: #fff; padding: 8px 15px;">
+                                <i class="fa fa-user" style="margin-right: 8px;"></i><b>@TempData["FirstName"]</b>
+                            </a>
+                        }
+                       
 
                         <li class="nav-item ms-auto">
                                 <a class="nav-link btn-signout" asp-controller="Account" asp-action="SignOut"><b>SignOut</b></a>
