@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,15 +28,15 @@ namespace MVC03.PL
             builder.Services.AddIdentity<AppUser, IdentityRole>()
                             .AddEntityFrameworkStores<CompanyDbContext>()
                             .AddDefaultTokenProviders();  // Enable Token
-           
+
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             }); // Allow Dependency Injection for CompanyDbContext
 
             //builder.Services.AddAutoMapper(typeof(EmployeeProfile));
-            builder.Services.AddAutoMapper(M=> M.AddProfile(new EmployeeProfile()));
-            builder.Services.AddAutoMapper(M=> M.AddProfile(new DepartmentProfile()));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new EmployeeProfile()));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new DepartmentProfile()));
 
             builder.Services.ConfigureApplicationCookie(config =>
             {
@@ -52,6 +52,38 @@ namespace MVC03.PL
             builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection(nameof(TwilioSettings)));
             builder.Services.AddScoped<ITwilioService, TwilioService>();
 
+
+            builder.Services.AddAuthentication(options =>
+           {
+               options.DefaultScheme = IdentityConstants.ApplicationScheme;
+               options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+           })
+            .AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+                googleOptions.CallbackPath = "/signin-google";
+            })
+            .AddFacebook(facebookOptions =>
+            {
+                facebookOptions.ClientId = builder.Configuration["Authentication:Facebook:ClientId"];
+                facebookOptions.ClientSecret = builder.Configuration["Authentication:Facebook:ClientSecret"];
+                facebookOptions.CallbackPath = "/signin-facebook";
+            });
+
+
+            //builder.Services.AddAuthentication(options =>
+            //{
+            //    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            //})
+            //.AddCookie()
+            //.AddGoogle(options =>
+            //{
+            //    options.ClientId = builder.Configuration["Google:ClientId"];
+            //    options.ClientSecret =builder.Configuration["Google:ClientSecret"];
+            //    options.CallbackPath = "/signin-google";
+            //});
 
 
             //builder.Services.AddAuthentication(options =>
@@ -73,7 +105,7 @@ namespace MVC03.PL
             //     IConfiguration AuthPath = builder.Configuration.GetSection("Authentication:Google");
             //     options.ClientId = AuthPath["ClientId"];
             //     options.ClientSecret = AuthPath["ClientSecret"];
-            //    // options.CallbackPath = "/signin-google";
+            //      options.CallbackPath = "/signin-google";
             // });
 
             //builder.Services.ConfigureApplicationCookie(options =>

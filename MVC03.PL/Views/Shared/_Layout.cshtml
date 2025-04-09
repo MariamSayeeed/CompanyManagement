@@ -132,36 +132,38 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" id="navbarSupportedContent">
-                    <ul class="navbar-nav flex-grow-1">
+                   <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Index"><b>Home</b></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy"><b>Privacy</b></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Department" asp-action="Index">Departments</a>
+                                <a class="nav-link text-dark" asp-controller="Department" asp-action="Index"><b>Departments</b></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Employee" asp-action="Index">Employees</a>
+                                <a class="nav-link text-dark" asp-controller="Employee" asp-action="Index"><b>Employees</b></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="User" asp-action="Index">Users</a>
+                                <a class="nav-link text-dark" asp-controller="User" asp-action="Index"><b>Users</b></a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link text-dark" asp-controller="Role" asp-action="Index">Roles</a>
+                                <a class="nav-link text-dark" asp-controller="Role" asp-action="Index"><b>Roles</b></a>
                         </li>
                         
                         @if (User.Identity.IsAuthenticated)
                             {
                             <a class="nav-link  ms-auto" style="font-size: 16px; font-weight: bold; color: #fff; padding: 8px 15px;">
-                                    <i class="fa fa-user" style="margin-right: 8px;"></i>@User.Identity.Name 
+                                    <i class="fa fa-user" style="margin-right: 8px;"></i><b>@User.Identity.Name </b>
                                 </a>
                             }
-                                                <li class="nav-item ms-auto">
-                            <a class="nav-link btn-signout" asp-controller="Account" asp-action="SignOut">SignOut</a>
+
+                        <li class="nav-item ms-auto">
+                                <a class="nav-link btn-signout" asp-controller="Account" asp-action="SignOut"><b>SignOut</b></a>
                         </li>
                     </ul>
+                    
                 </div>
             </div>
         </nav>

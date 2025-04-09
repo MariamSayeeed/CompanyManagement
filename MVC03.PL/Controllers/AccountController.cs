@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC03.DAL.Models;
 using MVC03.PL.Dtos;
 using MVC03.PL.Helpers;
+using System.Security.Claims;
 
 namespace MVC03.PL.Controllers
 {
@@ -21,7 +24,7 @@ namespace MVC03.PL.Controllers
         private readonly IMailService _mailService;
         private readonly ITwilioService _twilioService;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager , IMailService mailService, ITwilioService twilioService)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMailService mailService, ITwilioService twilioService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -53,7 +56,7 @@ namespace MVC03.PL.Controllers
                             FirstName = model.FirstName,
                             LastName = model.LastName,
                             Email = model.Email,
-                            IsArgee = model.IsAgree
+                            IsAgree = model.IsAgree
                         };
 
 
@@ -277,13 +280,13 @@ namespace MVC03.PL.Controllers
                     var sms = new SMS()
                     {
                         To = user.PhoneNumber,
-                       
+
                         Body = url
                     };
                     // Send Email
 
                     _twilioService.SendSMS(sms);
-                   
+
                     return RedirectToAction("CheckYourPhone");
 
                 }
@@ -299,43 +302,111 @@ namespace MVC03.PL.Controllers
 
         public IActionResult CheckYourPhone()
         {
-            return View(); 
+            return View();
         }
 
 
+        public IActionResult GoogleLogin()
+        {
+            var prop = new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("GoogleResponse")
+            };
+            return Challenge(prop, GoogleDefaults.AuthenticationScheme);
+        }
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
 
+            if (!result.Succeeded)
+                return RedirectToAction("SignIn", "Auth");
 
-        //-------------------------------
+            var externalUser = result.Principal;
 
+            var email = externalUser.FindFirstValue(ClaimTypes.Email);
 
-        //public IActionResult GoogleLogin()
-        //{
-        //    var prop = new AuthenticationProperties()
-        //    {
-        //        RedirectUri = Url.Action("GoogleResponse")
-        //    };
-        //    return Challenge(prop, GoogleDefaults.AuthenticationScheme);
+            var givenName = externalUser.FindFirstValue(ClaimTypes.GivenName);
+            var surname = externalUser.FindFirstValue(ClaimTypes.Surname);
+            var name = externalUser.FindFirstValue(ClaimTypes.Name);
 
-        //}
+            var user = await _userManager.FindByEmailAsync(email);
 
-        //public async Task<IActionResult> GoogleResponse()
-        //{
-        //    var Result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        //    var claims = Result.Principal.Identities.FirstOrDefault().Claims.Select(
-        //    claim => new
-        //    {
-        //        claim.Type,
-        //        claim.Value,
-        //        claim.Issuer,
-        //        claim.OriginalIssuer,
-        //        claim.Subject
-        //    }
-        //    );
+            if (user == null)
+            {
+                user = new AppUser
+                {
+                    UserName = name,
+                    Email = email,
+                    EmailConfirmed = true,
+                    FirstName = givenName ?? name?.Split(' ').FirstOrDefault() ?? "GoogleUser",
+                    LastName = surname ?? (name != null && name.Split(' ').Length > 1 ? name.Split(' ').Last() : "User")
+                };
 
-        //    return RedirectToAction("Index", "Home");
+                var createResult = await _userManager.CreateAsync(user);
 
-        //}
+                if (!createResult.Succeeded)
+                {
+                    foreach (var error in createResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return View("SignIn");
+                }
+            }
 
+            await _signInManager.SignInAsync(user, isPersistent: false);
+
+            return RedirectToAction("Index", "Home");
+        }
+        public IActionResult FacebookLogin()
+        {
+            var prop = new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("FacebookResponse")
+            };
+            return Challenge(prop, FacebookDefaults.AuthenticationScheme);
+        }
+
+        public async Task<IActionResult> FacebookResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
+            if (!result.Succeeded)
+                return RedirectToAction("SignIn", "Account");
+
+            var externalUser = result.Principal;
+            var email = externalUser.FindFirstValue(ClaimTypes.Email);
+            var givenName = externalUser.FindFirstValue(ClaimTypes.GivenName);
+            var surname = externalUser.FindFirstValue(ClaimTypes.Surname);
+            var name = externalUser.FindFirstValue(ClaimTypes.Name);
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                user = new AppUser
+                {
+                    UserName = email,
+                    Email = email,
+                    EmailConfirmed = true,
+                    FirstName = givenName ?? name?.Split(' ').FirstOrDefault() ?? "FacebookUser",
+                    LastName = surname ?? (name != null && name.Split(' ').Length > 1 ? name.Split(' ').Last() : "User")
+                };
+
+                var createResult = await _userManager.CreateAsync(user);
+
+                if (!createResult.Succeeded)
+                {
+                    foreach (var error in createResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return View("SignIn");
+                }
+            }
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            return RedirectToAction("Index", "Home");
+        }
         public IActionResult AccessDenied()
         {
             return View();

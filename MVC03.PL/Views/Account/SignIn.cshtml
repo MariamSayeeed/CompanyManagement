@@ -9,7 +9,6 @@
 	<div class="agileits-top">
 		<div asp-validation-summary="All"></div>
 
-
 		<form asp-action="SignIn">
 			<input class="text email" type="email" asp-for="Email" placeholder="Email" required="">
 			<input class="password" type="password" asp-for="Password" placeholder="Password" required="">
@@ -21,8 +20,17 @@
 				<div class="clear"> </div>
 			</div>
 			<input type="submit" value="SIGNIN">
-			<p><a asp-action="GoogleLogin">Login with Google Account</a></p>
-			<br />
+			<div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin: 10px 0;">
+				<a asp-action="GoogleLogin" style="display: flex; align-items: center; width: 80%; max-width: 300px; padding: 10px 15px; border-radius: 20px; text-decoration: none; font-weight: 500; transition: all 0.3s ease; background-color: #ffffff; border: 1px solid #dadce0; color: #3c4043;">
+					<img src="~/files/images/googleLogo.jpeg" style="width: 24px; height: 24px; margin-right: 10px;" alt="Google">
+					Sign in with Google
+				</a>
+				<a asp-action="FacebookLogin" style="display: flex; align-items: center; width: 80%; max-width: 300px; padding: 10px 15px; border-radius: 20px; text-decoration: none; font-weight: 500; transition: all 0.3s ease; background-color: #1877f2; border: 1px solid #1877f2; color: white;">
+					<img src="~/files/images/facebooklogo.jpeg" style="width: 24px; height: 24px; margin-right: 10px;" alt="Facebook">
+					Sign in with Facebook
+				</a>
+			</div>
+
 
 		</form>
 		<p>Don't have an Account? <a asp-action="SignUp"> Create new Account</a></p>
