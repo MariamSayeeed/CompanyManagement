@@ -324,7 +324,6 @@ namespace MVC03.PL.Controllers
             var externalUser = result.Principal;
 
             var email = externalUser.FindFirstValue(ClaimTypes.Email);
-
             var givenName = externalUser.FindFirstValue(ClaimTypes.GivenName);
             var surname = externalUser.FindFirstValue(ClaimTypes.Surname);
             var name = externalUser.FindFirstValue(ClaimTypes.Name);
@@ -356,8 +355,13 @@ namespace MVC03.PL.Controllers
 
             await _signInManager.SignInAsync(user, isPersistent: false);
 
+            // إرسال الاسم الأول إلى _Layout.cshtml باستخدام ViewBag
+            TempData["FirstName"] = user.FirstName;
+
+
             return RedirectToAction("Index", "Home");
         }
+
         public IActionResult FacebookLogin()
         {
             var prop = new AuthenticationProperties()
