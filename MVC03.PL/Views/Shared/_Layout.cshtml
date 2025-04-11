@@ -1,4 +1,5 @@
-﻿@* @if (TempData["FirstName"] != null) *@
+﻿@using System.Security.Claims
+@* @if (TempData["FirstName"] != null) *@
 @* { *@
 @*     <a class="nav-link text-dark" href="#">Welcome, @TempData["FirstName"]</a> *@
 @* } *@
@@ -156,13 +157,30 @@
                                 <a class="nav-link text-dark" asp-controller="Role" asp-action="Index"><b>Roles</b></a>
                         </li>
 
-                        @if (TempData["FirstName"] != null)
-                        {
-                            <a class="nav-link ms-auto" style="font-size: 16px; font-weight: bold; color: #fff; padding: 8px 15px;">
-                                <i class="fa fa-user" style="margin-right: 8px;"></i><b>@TempData["FirstName"]</b>
-                            </a>
-                        }
-                       
+                        @if (ViewData["FirstName"] != null) 
+                         { 
+                             <a class="nav-link ms-auto" style="font-size: 16px; font-weight: bold; color: #fff; padding: 8px 15px;"> 
+                                 <i class="fa fa-user" style="margin-right: 8px;"></i><b>@ViewData["FirstName"]</b> 
+                             </a> 
+                         }
+                        
+                        
+                        @* @if (User.Identity.IsAuthenticated) *@
+                        @* { *@
+                        @*     <a class="nav-link ms-auto" style="font-size: 16px; font-weight: bold; color: #fff; padding: 8px 15px;"> *@
+                        @*         <i class="fa fa-user" style="margin-right: 8px;"></i><b>@User.FindFirstValue(ClaimTypes.GivenName)</b> *@
+                        @*         </a> *@
+                        @*     @* <div class="user-info"> *@ 
+                        @*     @*     <span>Welcome, @User.FindFirstValue(ClaimTypes.GivenName)</span> *@ 
+                        @*     @* </div> *@ 
+                        @* } *@
+
+                        @if (User.Identity.IsAuthenticated) 
+                         { 
+                             <a class="nav-link ms-auto" style="font-size: 16px; font-weight: bold; color: #fff; padding: 8px 15px;"> 
+                                 <i class="fa fa-user" style="margin-right: 8px;"></i><b>@User.Identity.Name</b> 
+                             </a> 
+                         }
 
                         <li class="nav-item ms-auto">
                                 <a class="nav-link btn-signout" asp-controller="Account" asp-action="SignOut"><b>SignOut</b></a>

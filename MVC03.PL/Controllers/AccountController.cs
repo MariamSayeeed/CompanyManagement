@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC03.DAL.Models;
@@ -13,7 +14,7 @@ using System.Security.Claims;
 namespace MVC03.PL.Controllers
 {
 
-    //  P@sW0rrd
+    //  P@sW0rrd font-size: .9em;
 
 
     // P@SSw0rddd
@@ -113,9 +114,6 @@ namespace MVC03.PL.Controllers
                     }
 
                     ModelState.AddModelError("", "Invalid Login !!");
-
-
-
                 }
 
                 ModelState.AddModelError("", "Invalid Login !!");
@@ -334,8 +332,8 @@ namespace MVC03.PL.Controllers
             {
                 user = new AppUser
                 {
-                    UserName = name,
-                    Email = email,
+                    UserName = $"{givenName}{surname}".Replace(" ", ""),  
+                    Email = email,  
                     EmailConfirmed = true,
                     FirstName = givenName ?? name?.Split(' ').FirstOrDefault() ?? "GoogleUser",
                     LastName = surname ?? (name != null && name.Split(' ').Length > 1 ? name.Split(' ').Last() : "User")
@@ -353,14 +351,16 @@ namespace MVC03.PL.Controllers
                 }
             }
 
-            await _signInManager.SignInAsync(user, isPersistent: false);
 
-            // إرسال الاسم الأول إلى _Layout.cshtml باستخدام ViewBag
-            TempData["FirstName"] = user.FirstName;
+            ViewData["FirstName"] = givenName;
+
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
 
 
             return RedirectToAction("Index", "Home");
         }
+
 
         public IActionResult FacebookLogin()
         {

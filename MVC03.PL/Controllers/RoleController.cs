@@ -10,7 +10,7 @@ using System.Drawing;
 namespace MVC03.PL.Controllers
 {
     [Authorize]
-   // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
 
     public class RoleController : Controller
     {
@@ -223,7 +223,8 @@ namespace MVC03.PL.Controllers
                 var userInRole = new UsersInRoleDto()
                 {
                     UserId = user.Id,
-                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName
 
                 };
 

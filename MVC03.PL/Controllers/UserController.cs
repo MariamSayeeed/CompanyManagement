@@ -143,7 +143,7 @@ namespace MVC03.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Delete([FromRoute] string id, UserToReturnDto model)
         {

@@ -14,11 +14,12 @@
     {
         <div class="form-group">
             <input asp-for="@Model[i].IsSelected" />
-            <label asp-for="@Model[i].IsSelected">@Model[i].UserName</label>
+            <label asp-for="@Model[i].IsSelected">@Model[i].FirstName @Model[i].LastName</label>
         </div>
 
         <input hidden asp-for="@Model[i].UserId" />
-        <input hidden asp-for="@Model[i].UserName" />
+        <input hidden asp-for="@Model[i].FirstName" />
+        <input hidden asp-for="@Model[i].LastName" />
 
 
 
