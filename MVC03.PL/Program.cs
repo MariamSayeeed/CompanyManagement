@@ -72,52 +72,6 @@ namespace MVC03.PL
             });
 
 
-            //builder.Services.AddAuthentication(options =>
-            //{
-            //    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-            //})
-            //.AddCookie()
-            //.AddGoogle(options =>
-            //{
-            //    options.ClientId = builder.Configuration["Google:ClientId"];
-            //    options.ClientSecret =builder.Configuration["Google:ClientSecret"];
-            //    options.CallbackPath = "/signin-google";
-            //});
-
-
-            //builder.Services.AddAuthentication(options =>
-            //{
-            //    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-            //})
-            // .AddCookie
-            // (
-            //    options =>
-            //    {
-            //        options.LoginPath = "/Account/SignIn";
-            //        options.AccessDeniedPath = "/Account/AccessDenied";
-            //        options.Cookie.SameSite = SameSiteMode.None;
-            //        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            //    })
-            // .AddGoogle(options =>
-            // {
-            //     IConfiguration AuthPath = builder.Configuration.GetSection("Authentication:Google");
-            //     options.ClientId = AuthPath["ClientId"];
-            //     options.ClientSecret = AuthPath["ClientSecret"];
-            //      options.CallbackPath = "/signin-google";
-            // });
-
-            //builder.Services.ConfigureApplicationCookie(options =>
-            //{
-            //    options.LoginPath = "/Account/SignIn";
-            //    options.AccessDeniedPath = "/Account/AccessDenied";
-            //    options.Cookie.SameSite = SameSiteMode.None;
-            //    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            //});
-
-
-
 
             ////- -------------------------------   Build --------
             var app = builder.Build();
